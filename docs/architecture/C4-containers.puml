@@ -1,0 +1,27 @@
+@startuml C4Container
+!include <C4/C4_Container>
+
+title HitTrack — Diagrama C4 de contêineres
+
+Person(analyst, "Analista/equipe", "Usa o dashboard e as rotas de ingestão.")
+System_Ext(detector, "hitcount-ia", "Repositório externo; detector, dados e pesos.")
+System_Ext(prometheus, "Prometheus", "Coleta métricas da API.")
+System_Ext(grafana, "Grafana", "Exibe métricas operacionais.")
+
+System_Boundary(hittrack, "HitTrack") {
+  Container(frontend, "Frontend", "React + Vite", "Dashboard, formulários, filtros e visualização.")
+  Container(api, "API", "Python + FastAPI", "Rotas REST, análise de vídeo, métricas e endpoint Prometheus.")
+  ContainerDb(database, "Banco de dados", "SQLite ou PostgreSQL + SQLAlchemy", "Lutas, hits, aliases e metadados.")
+  Container(storage, "Armazenamento de vídeos", "Sistema de arquivos local", "Uploads associados a lutas.")
+}
+
+Rel(analyst, frontend, "Opera", "Navegador")
+Rel(frontend, api, "Consulta e envia dados", "HTTP/JSON; local: :8000")
+Rel(api, database, "Lê e persiste lutas/hits", "SQLAlchemy")
+Rel(api, storage, "Salva e lê vídeos", "Arquivos locais")
+Rel(api, detector, "Inicia worker de análise; usa pesos/dados externos", "Python")
+Rel(prometheus, api, "Scrape de /metrics", "HTTP")
+Rel(grafana, prometheus, "Consulta séries", "PromQL")
+
+SHOW_LEGEND()
+@enduml

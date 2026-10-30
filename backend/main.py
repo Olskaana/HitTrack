@@ -18,6 +18,7 @@ from hit_state import HitState
 from latest import Latest
 from models import Fight, HitEvent
 from auto_detector import AutoHitWorker
+from monitoring import collect_http_metrics, metrics_app
 from routers.fights import router as fights_router
 
 
@@ -31,6 +32,8 @@ from detector import CamWorker  # noqa: E402
 
 app = FastAPI(title="HitTrack API", version="1.0")
 app.include_router(fights_router)
+app.middleware("http")(collect_http_metrics)
+app.mount("/metrics", metrics_app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

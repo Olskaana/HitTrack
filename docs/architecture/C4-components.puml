@@ -1,0 +1,30 @@
+@startuml C4Component
+!include <C4/C4_Component>
+
+title HitTrack — Diagrama C4 de componentes da API
+
+Container_Ext(frontend, "Frontend", "React + Vite", "Dashboard e cliente REST.")
+ContainerDb_Ext(database, "Banco de dados", "SQLite/PostgreSQL", "Persistência de lutas e hits.")
+Container_Ext(storage, "Uploads", "Sistema de arquivos", "Vídeos das lutas.")
+Container_Ext(detector, "hitcount-ia", "Python externo", "Worker CamWorker, pesos e dados.")
+Container_Ext(prometheus, "Prometheus", "Prometheus", "Scrape de métricas.")
+
+Container_Boundary(api, "API HitTrack — FastAPI") {
+  Component(fight_routes, "Rotas de lutas", "backend/routers/fights.py", "Cadastro, consultas, uploads e importação de hits.")
+  Component(analysis_routes, "Rotas de análise", "backend/main.py", "Controle de workers e ciclo de análise de vídeo.")
+  Component(metrics_service, "Serviço de métricas", "backend/metrics.py", "Agrupa hits e calcula métricas de uma luta.")
+  Component(persistence, "Persistência e modelos", "backend/database.py + backend/models.py", "Configura sessões, esquema e entidades SQLAlchemy.")
+  Component(observability, "Instrumentação HTTP", "backend/monitoring.py", "Conta e mede duração das requisições; expõe /metrics.")
+}
+
+Rel(frontend, fight_routes, "Consome e envia dados", "HTTP/JSON")
+Rel(frontend, analysis_routes, "Inicia/encerra análise", "HTTP/JSON")
+Rel(fight_routes, metrics_service, "Solicita métricas")
+Rel(fight_routes, persistence, "Persiste e consulta dados")
+Rel(analysis_routes, persistence, "Lê lutas e persiste eventos")
+Rel(analysis_routes, detector, "Controla análise", "Python")
+Rel(fight_routes, storage, "Salva/lê vídeos", "Arquivos")
+Rel(prometheus, observability, "Coleta /metrics", "HTTP")
+
+SHOW_LEGEND()
+@enduml

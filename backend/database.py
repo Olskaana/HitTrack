@@ -9,7 +9,9 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./hittrack.db")
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is required. Configure it in backend/.env.")
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)

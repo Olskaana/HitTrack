@@ -1,0 +1,18 @@
+@startuml C4Context
+!include <C4/C4_Context>
+
+title HitTrack — Diagrama C4 de contexto
+
+Person(analyst, "Analista/equipe", "Registra lutas e consulta dados de combate.")
+System(hittrack, "HitTrack", "Registra lutas e hits, calcula métricas por luta e apresenta um dashboard.")
+System_Ext(detector, "hitcount-ia", "Dependência externa e separada que detecta hits em vídeos.")
+System_Ext(prometheus, "Prometheus", "Coleta métricas operacionais expostas pela API.")
+System_Ext(grafana, "Grafana", "Apresenta dashboards sobre as métricas coletadas.")
+
+Rel(analyst, hittrack, "Registra lutas, importa eventos e consulta histórico", "HTTPS/REST")
+Rel(hittrack, detector, "Solicita análise e recebe eventos de hit", "Python/in-process")
+Rel(prometheus, hittrack, "Coleta métricas", "HTTP GET /metrics")
+Rel(grafana, prometheus, "Consulta séries temporais", "PromQL")
+
+SHOW_LEGEND()
+@enduml
