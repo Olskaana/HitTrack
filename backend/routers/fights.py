@@ -134,7 +134,18 @@ def read_video(fight_id: int, db: Session = Depends(get_db)):
 def import_hits(fight_id: int, payload: HitImport, db: Session = Depends(get_db)):
     fight = get_fight(fight_id, db)
     validate_hit_robots(fight, payload)
-    events = [HitEvent(fight_id=fight.id, frame=item.frame, robot=item.robot) for item in payload.events]
+    existing_hits = set(
+        db.execute(
+            select(HitEvent.frame, HitEvent.robot).where(HitEvent.fight_id == fight.id)
+        ).all()
+    )
+    events = []
+    for item in payload.events:
+        identity = (item.frame, item.robot)
+        if identity not in existing_hits:
+            existing_hits.add(identity)
+            events.append(HitEvent(fight_id=fight.id, frame=item.frame, robot=item.robot))
+
     db.add_all(events)
     db.commit()
     for event in events:
