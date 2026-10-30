@@ -85,15 +85,43 @@ Infraestrutura: Docker · GitHub Actions · SonarCloud · Prometheus + Grafana
 
 | Camada | Tecnologia |
 |---|---|
-| Frontend | React.js + Chart.js + TypeScript |
-| Backend | Node.js + Express + TypeScript |
-| Banco de Dados | PostgreSQL + Prisma ORM |
-| Testes | Jest / Vitest (TDD) |
+| Frontend | React + Vite |
+| Backend | Python + FastAPI + SQLAlchemy |
+| Banco de Dados | SQLite / PostgreSQL |
+| Testes | pytest + pytest-cov / Vitest |
 | CI/CD | GitHub Actions |
 | Análise Estática | SonarCloud |
 | Monitoramento | Prometheus + Grafana |
 | Deploy | Docker → Render ou Railway |
 | Segurança | HTTPS, JWT, proteção contra XSS/CSRF |
+
+---
+
+## 🧪 Testes e cobertura
+
+Os testes cobrem somente o código deste repositório: backend em `backend/` e frontend em `frontend/`. O projeto `hitcount-ia/` não faz parte da suíte nem do cálculo de cobertura; integrações com o detector são substituídas por dublês nos testes.
+
+### Backend
+
+Na raiz do repositório, instale as dependências e execute:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r backend\requirements.txt
+.\.venv\Scripts\python.exe -m pytest
+```
+
+O pytest-cov mede a cobertura do backend e exige mínimo de 75%.
+
+### Frontend
+
+Na pasta `frontend/`, instale as dependências e execute os testes com cobertura:
+
+```powershell
+npm ci
+npm run test:coverage
+```
+
+O Vitest exige mínimo de 25% em linhas, instruções, funções e branches. Para executar em modo interativo, use `npm run test:watch`.
 
 ---
 
