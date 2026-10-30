@@ -39,8 +39,8 @@ O frontend consulta luta, métricas e placar; apresenta comparação, vídeo qua
 | Listar histórico | `GET /api/fights` | Lutas e totais |
 | Ler luta | `GET /api/fights/{id}` | Dados da luta |
 | Enviar vídeo | `POST /api/fights/{id}/video` | Arquivo associado |
-| Importar hits JSON | `POST /api/fights/{id}/hits` | Eventos validados |
-| Importar arquivo de hits | `POST /api/fights/{id}/hits/upload` | Eventos validados |
+| Importar hits JSON | `POST /api/fights/{id}/hits` | Eventos validados; duplicatas idênticas por frame/robô são ignoradas |
+| Importar arquivo de hits | `POST /api/fights/{id}/hits/upload` | Eventos validados; duplicatas idênticas por frame/robô são ignoradas |
 | Calcular métricas | `GET /api/fights/{id}/metrics` | Métricas daquela luta |
 | Obter vídeo | `GET /api/fights/{id}/video` | Conteúdo do vídeo |
 | Iniciar/interromper análise | `POST /api/fights/{id}/analyze`, `POST /api/fights/{id}/stop` | Estado da análise |

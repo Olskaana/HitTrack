@@ -58,6 +58,27 @@ def test_hit_import_rejects_unregistered_robot(api_client):
     assert response.json()["detail"]["invalid_robots"] == ["intruso"]
 
 
+def test_hit_import_is_idempotent_for_duplicate_events(api_client):
+    fight = create_fight(api_client).json()
+    path = f"/api/fights/{fight['id']}/hits"
+    payload = {
+        "events": [
+            {"frame": 30, "robot": "Robo A"},
+            {"frame": 30, "robot": "Robo A"},
+            {"frame": 60, "robot": "Robo B"},
+        ]
+    }
+
+    first_import = api_client.post(path, json=payload)
+    repeated_import = api_client.post(path, json=payload)
+
+    assert first_import.status_code == 201
+    assert len(first_import.json()) == 2
+    assert repeated_import.status_code == 201
+    assert repeated_import.json() == []
+    assert api_client.get(f"/api/fights/{fight['id']}/metrics").json()["total_hits"] == 2
+
+
 def test_upload_hits_accepts_json_and_rejects_invalid_json(api_client):
     fight = create_fight(api_client).json()
     path = f"/api/fights/{fight['id']}/hits/upload"
