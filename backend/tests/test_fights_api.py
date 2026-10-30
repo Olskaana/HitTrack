@@ -7,8 +7,12 @@ import routers.fights as fights_router
 
 def create_fight(client, **overrides):
     payload = {
+        "competition": "Copa Regional",
         "robot_red": "Robo A",
         "robot_green": "Robo B",
+        "team_red": "Equipe A",
+        "team_green": "Equipe B",
+        "category": "antweight",
         "duration_seconds": 60,
         "fps": 30,
         "robot_aliases": {"vermelho": "Robo A", "azul": "Robo B"},
@@ -18,7 +22,7 @@ def create_fight(client, **overrides):
 
 
 def test_fight_lifecycle_and_metrics(api_client):
-    response = create_fight(api_client, team_red="Equipe A", category="antweight")
+    response = create_fight(api_client, competition="Copa Regional", team_red="Equipe A", category="antweight")
     assert response.status_code == 201
     fight = response.json()
 
@@ -37,13 +41,106 @@ def test_fight_lifecycle_and_metrics(api_client):
     listed = api_client.get("/api/fights")
     assert listed.status_code == 200
     assert listed.json()[0]["total_hits"] == 2
+    assert listed.json()[0]["competition"] == "Copa Regional"
+    assert listed.json()[0]["created_at"]
+    assert listed.json()[0]["fought_at"] is None
     assert api_client.get(f"/api/fights/{fight['id']}").json()["robot_red"] == "Robo A"
+
+
+def test_fight_creation_requires_competition_category_and_both_teams(api_client):
+    payload = {
+        "robot_red": "Robo A",
+        "robot_green": "Robo B",
+        "duration_seconds": 60,
+        "fps": 30,
+    }
+
+    response = api_client.post("/api/fights", json=payload)
+
+    assert response.status_code == 422
 
 
 def test_fight_creation_rejects_invalid_winner(api_client):
     response = create_fight(api_client, winner_robot="Robo inexistente")
 
     assert response.status_code == 422
+
+
+def test_closed_fight_can_record_winner(api_client):
+    fight = create_fight(api_client, status="encerrada").json()
+
+    response = api_client.patch(
+        f"/api/fights/{fight['id']}/result",
+        json={"winner_robot": "Robo B"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["winner_robot"] == "Robo B"
+    assert response.json()["result"] == "vitoria"
+
+
+def test_fight_result_rejects_non_competitor_and_active_fight(api_client):
+    closed_fight = create_fight(api_client, status="encerrada").json()
+    active_fight = create_fight(api_client).json()
+
+    invalid_winner = api_client.patch(
+        f"/api/fights/{closed_fight['id']}/result",
+        json={"winner_robot": "Outro robô"},
+    )
+    active_result = api_client.patch(
+        f"/api/fights/{active_fight['id']}/result",
+        json={"winner_robot": "Robo A"},
+    )
+
+    assert invalid_winner.status_code == 422
+    assert active_result.status_code == 409
+
+
+def test_fight_elo_can_be_recorded_for_existing_fight(api_client):
+    fight = create_fight(api_client).json()
+
+    response = api_client.patch(
+        f"/api/fights/{fight['id']}/elo",
+        json={"elo_red": 1240, "elo_green": 1110},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["elo_red"] == 1240
+    assert response.json()["elo_green"] == 1110
+
+
+def test_closed_fight_can_record_elo(api_client):
+    fight = create_fight(api_client, status="encerrada").json()
+
+    response = api_client.patch(
+        f"/api/fights/{fight['id']}/elo",
+        json={"elo_red": 1240, "elo_green": 1110},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["elo_red"] == 1240
+    assert response.json()["elo_green"] == 1110
+
+
+def test_fight_history_includes_video_filename(api_client, monkeypatch, tmp_path):
+    video_path = tmp_path / "fight.mp4"
+    video_path.write_bytes(b"video")
+    fight = create_fight(api_client).json()
+    monkeypatch.setattr(fights_router, "UPLOADS_DIR", tmp_path)
+
+    with video_path.open("rb") as video:
+        upload = api_client.post(
+            f"/api/fights/{fight['id']}/video",
+            files={"file": ("fight.mp4", video, "video/mp4")},
+        )
+
+    assert upload.status_code == 200
+    video_response = api_client.get(f"/api/fights/{fight['id']}/video")
+    assert video_response.status_code == 200
+    assert video_response.content == b"video"
+    history = api_client.get("/api/fights")
+    assert history.status_code == 200
+    assert history.json()[0]["video_filename"] == "fight.mp4"
 
 
 def test_hit_import_rejects_unregistered_robot(api_client):

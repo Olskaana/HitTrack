@@ -10,7 +10,16 @@ from sqlalchemy.orm import Session, selectinload
 from database import get_db
 from metrics import calculate_metrics
 from models import Fight, HitEvent
-from schemas import FightCreate, FightMetrics, FightResponse, FightSummary, HitImport, HitResponse
+from schemas import (
+    FightCreate,
+    FightEloUpdate,
+    FightMetrics,
+    FightResponse,
+    FightResultUpdate,
+    FightSummary,
+    HitImport,
+    HitResponse,
+)
 
 
 router = APIRouter(prefix="/api/fights", tags=["fights"])
@@ -65,14 +74,19 @@ def list_fights(db: Session = Depends(get_db)):
     return [
         FightSummary(
             id=fight.id,
+            competition=fight.competition,
+            fought_at=fight.fought_at,
+            created_at=fight.created_at,
             robot_red=fight.robot_red,
             robot_green=fight.robot_green,
             team_red=fight.team_red,
             team_green=fight.team_green,
+            video_filename=fight.video_filename,
             category=fight.category,
             status=fight.status,
             status_note=fight.status_note,
             result=fight.result,
+            winner_robot=fight.winner_robot,
             total_hits=len(fight.hits),
             duration_seconds=fight.duration_seconds,
         )
@@ -83,6 +97,43 @@ def list_fights(db: Session = Depends(get_db)):
 @router.get("/{fight_id}", response_model=FightResponse)
 def read_fight(fight_id: int, db: Session = Depends(get_db)):
     return get_fight(fight_id, db)
+
+
+@router.patch("/{fight_id}/result", response_model=FightResponse)
+def set_fight_result(
+    fight_id: int,
+    payload: FightResultUpdate,
+    db: Session = Depends(get_db),
+):
+    fight = get_fight(fight_id, db)
+    if fight.status != "encerrada":
+        raise HTTPException(status_code=409, detail="Encerre a luta antes de registrar o vencedor.")
+    if payload.winner_robot not in {fight.robot_red, fight.robot_green}:
+        raise HTTPException(status_code=422, detail="O vencedor deve ser um dos robôs cadastrados na luta.")
+
+    fight.winner_robot = payload.winner_robot
+    fight.result = "vitoria"
+    if fight.status_note and fight.status_note.startswith("Empate em hits"):
+        fight.status_note = f"{fight.status_note.split(';', maxsplit=1)[0]}; resultado avaliado manualmente."
+    else:
+        fight.status_note = "Vencedor informado manualmente."
+    db.commit()
+    db.refresh(fight)
+    return fight
+
+
+@router.patch("/{fight_id}/elo", response_model=FightResponse)
+def set_fight_elo(
+    fight_id: int,
+    payload: FightEloUpdate,
+    db: Session = Depends(get_db),
+):
+    fight = get_fight(fight_id, db)
+    fight.elo_red = payload.elo_red
+    fight.elo_green = payload.elo_green
+    db.commit()
+    db.refresh(fight)
+    return fight
 
 
 @router.post("/{fight_id}/video", response_model=FightResponse)

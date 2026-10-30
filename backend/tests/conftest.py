@@ -25,10 +25,12 @@ def db_session():
 
 @pytest.fixture
 def api_client(db_session):
+    from routers.analytics import router as analytics_router
     from routers.fights import router
 
     app = FastAPI()
     app.include_router(router)
+    app.include_router(analytics_router)
     app.dependency_overrides[get_db] = lambda: db_session
     with TestClient(app) as client:
         yield client
