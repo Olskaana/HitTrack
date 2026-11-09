@@ -306,6 +306,14 @@ def test_analyze_fight_uses_default_video_for_legacy_fight(
 
 def test_stop_fight_persists_status_and_last_frame(main_module, db_session):
     fight = create_fight(db_session)
+    db_session.add_all(
+        [
+            HitEvent(fight_id=fight.id, frame=10, robot="vermelho"),
+            HitEvent(fight_id=fight.id, frame=20, robot="vermelho"),
+            HitEvent(fight_id=fight.id, frame=30, robot="azul"),
+        ]
+    )
+    db_session.commit()
     worker = FakeWorker()
     worker.alive = True
     worker.frame_idx = 14
@@ -317,16 +325,38 @@ def test_stop_fight_persists_status_and_last_frame(main_module, db_session):
 
     assert response["status"] == "encerrada"
     assert response["frame"] == 14
+    assert response["winner_robot"] == "Robo A"
+    assert response["hits_red"] == 2
+    assert response["hits_green"] == 1
     assert response["status_note"]
+    assert db_session.get(Fight, fight.id).duration_seconds == pytest.approx(14 / 30)
     assert worker.stopped
     assert worker.join_timeout == 5
     assert main_module.worker is None
     assert main_module.latest.get() is None
     assert db_session.get(Fight, fight.id).status == "encerrada"
+    assert db_session.get(Fight, fight.id).winner_robot == "Robo A"
 
     with pytest.raises(HTTPException) as missing_fight:
         main_module.stop_fight(999, db_session)
     assert missing_fight.value.status_code == 404
+
+
+def test_stop_fight_requires_manual_evaluation_when_hits_are_tied(main_module, db_session):
+    fight = create_fight(db_session)
+    db_session.add_all(
+        [
+            HitEvent(fight_id=fight.id, frame=10, robot="Robo A"),
+            HitEvent(fight_id=fight.id, frame=20, robot="Robo B"),
+        ]
+    )
+    db_session.commit()
+
+    response = main_module.stop_fight(fight.id, db_session)
+
+    assert response["hits_red"] == response["hits_green"] == 1
+    assert response["winner_robot"] is None
+    assert "Empate em hits" in response["status_note"]
 
 
 def test_stop_fight_handles_worker_that_has_already_finished(main_module, db_session):
@@ -346,7 +376,19 @@ def test_stop_fight_handles_worker_that_has_already_finished(main_module, db_ses
 def test_run_auto_analysis_persists_hits_and_finishes_fight(
     main_module, monkeypatch, use_reference_hits
 ):
-    fight = SimpleNamespace(status="em_andamento", status_note="pending")
+    fight = SimpleNamespace(
+        id=3,
+        status="em_andamento",
+        status_note="pending",
+        robot_red="Robo A",
+        robot_green="Robo B",
+        duration_seconds=60,
+        fps=30,
+        robot_aliases={},
+        hits=[],
+        winner_robot=None,
+        result=None,
+    )
     scalar_calls = []
     session_events = []
 
@@ -367,6 +409,7 @@ def test_run_auto_analysis_persists_hits_and_finishes_fight(
 
         def add(self, event):
             session_events.append(event)
+            fight.hits.append(event)
 
         def commit(self):
             session_events.append("commit")
@@ -404,6 +447,7 @@ def test_run_auto_analysis_persists_hits_and_finishes_fight(
     assert len(session_events) == 3
     assert fight.status == "encerrada"
     assert fight.status_note is None
+    assert fight.winner_robot == "Robo A"
     assert main_module.last_analysis_frame == 0
 
 

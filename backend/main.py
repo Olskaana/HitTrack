@@ -18,7 +18,9 @@ from hit_state import HitState
 from latest import Latest
 from models import Fight, HitEvent
 from auto_detector import AutoHitWorker
+from metrics import apply_hit_result
 from monitoring import collect_http_metrics, metrics_app
+from routers.analytics import router as analytics_router
 from routers.fights import router as fights_router
 
 
@@ -32,6 +34,7 @@ from detector import CamWorker  # noqa: E402
 
 app = FastAPI(title="HitTrack API", version="1.0")
 app.include_router(fights_router)
+app.include_router(analytics_router)
 app.middleware("http")(collect_http_metrics)
 app.mount("/metrics", metrics_app)
 app.add_middleware(
@@ -136,10 +139,15 @@ def run_auto_analysis(video_source: str, fight_id: int, robot_names: tuple[str, 
         if generation != analysis_generation:
             return
         with SessionLocal() as session:
-            fight = session.scalar(select(Fight).where(Fight.id == fight_id))
+            fight = session.scalar(
+                select(Fight)
+                .options(selectinload(Fight.hits))
+                .where(Fight.id == fight_id)
+            )
             if fight is not None and fight.status == "em_andamento":
                 fight.status = "encerrada"
                 fight.status_note = None
+                apply_hit_result(fight)
                 session.commit()
 
     threading.Thread(target=finalize_when_finished, args=(worker,), daemon=True).start()
@@ -194,6 +202,8 @@ def analyze_fight(fight_id: int, db: Session = Depends(get_db)):
     last_analysis_frame = 0
     fight.status = "em_andamento"
     fight.status_note = None
+    fight.winner_robot = None
+    fight.result = None
     db.commit()
     if worker is not None:
         worker.stop()
@@ -210,25 +220,44 @@ def analyze_fight(fight_id: int, db: Session = Depends(get_db)):
 
 @app.post("/api/fights/{fight_id}/stop")
 def stop_fight(fight_id: int, db: Session = Depends(get_db)):
-    fight = db.scalar(select(Fight).where(Fight.id == fight_id))
+    fight = db.scalar(
+        select(Fight)
+        .options(selectinload(Fight.hits))
+        .where(Fight.id == fight_id)
+    )
     if fight is None:
         raise HTTPException(status_code=404, detail="Luta não encontrada")
 
     global worker, analysis_generation, last_analysis_frame
     analysis_generation += 1
-    if worker is not None:
-        last_analysis_frame = getattr(worker, "frame_idx", last_analysis_frame)
-        worker.stop()
-        if worker.is_alive():
-            worker.join(timeout=5)
+    active_worker = worker
+    was_running = fight.status == "em_andamento" and active_worker is not None and active_worker.is_alive()
+    if active_worker is not None:
+        active_worker.stop()
+        if active_worker.is_alive():
+            active_worker.join(timeout=5)
+        last_analysis_frame = getattr(active_worker, "frame_idx", last_analysis_frame)
         worker = None
+    if was_running and fight.fps > 0:
+        elapsed_seconds = max(last_analysis_frame / fight.fps, 1 / fight.fps)
+        fight.duration_seconds = min(fight.duration_seconds, elapsed_seconds)
     hit_state.reset()
     latest.set(None)
     fight.status = "encerrada"
     fight.status_note = "Luta finalizada antes da análise ser completada; os dados podem estar incompletos."
+    hits_red, hits_green = apply_hit_result(fight)
     db.commit()
     db.refresh(fight)
-    return {"fight_id": fight.id, "status": fight.status, "status_note": fight.status_note, "frame": last_analysis_frame}
+    return {
+        "fight_id": fight.id,
+        "status": fight.status,
+        "status_note": fight.status_note,
+        "winner_robot": fight.winner_robot,
+        "result": fight.result,
+        "hits_red": hits_red,
+        "hits_green": hits_green,
+        "frame": last_analysis_frame,
+    }
 
 
 @app.get("/")

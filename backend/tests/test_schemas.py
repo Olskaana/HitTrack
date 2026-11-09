@@ -8,8 +8,12 @@ from schemas import FightCreate, HitImport
 
 def valid_fight(**overrides):
     return {
+        "competition": "Copa Regional",
         "robot_red": "Robo A",
         "robot_green": "Robo B",
+        "team_red": "Equipe A",
+        "team_green": "Equipe B",
+        "category": "antweight",
         "duration_seconds": 120,
         "fps": 30,
         **overrides,
@@ -34,6 +38,7 @@ def test_fight_create_applies_defaults_and_accepts_matching_winner():
         {"category": "invalid"},
         {"status": "invalid"},
         {"result": "invalid"},
+        {"result": "empate"},
         {"competition": "x" * 161},
     ],
 )
@@ -42,13 +47,13 @@ def test_fight_create_rejects_invalid_values(changes):
         FightCreate(**valid_fight(**changes))
 
 
-def test_fight_create_accepts_optional_competition_fields():
+def test_fight_create_accepts_required_competition_fields():
     fight = FightCreate(
         **valid_fight(
             competition="Regional",
             fought_at=datetime(2026, 1, 1),
             category="antweight",
-            result="empate",
+            result="vitoria",
             status="encerrada",
         )
     )
@@ -56,6 +61,15 @@ def test_fight_create_accepts_optional_competition_fields():
     assert fight.competition == "Regional"
     assert fight.category == "antweight"
     assert fight.status == "encerrada"
+
+
+@pytest.mark.parametrize("field", ["competition", "team_red", "team_green", "category"])
+def test_fight_create_requires_competition_category_and_teams(field):
+    payload = valid_fight()
+    payload.pop(field)
+
+    with pytest.raises(ValidationError):
+        FightCreate(**payload)
 
 
 @pytest.mark.parametrize("event", [{"frame": -1, "robot": "Robo A"}, {"frame": 0, "robot": ""}])

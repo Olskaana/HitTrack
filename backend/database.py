@@ -3,8 +3,9 @@ from collections.abc import Generator
 from pathlib import Path
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine, inspect, select, text
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.orm import selectinload
 
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
@@ -38,6 +39,8 @@ def init_db() -> None:
         "video_filename": "VARCHAR(255)",
         "team_red": "VARCHAR(120)",
         "team_green": "VARCHAR(120)",
+        "elo_red": "FLOAT",
+        "elo_green": "FLOAT",
         "category": "VARCHAR(30)",
         "status": "VARCHAR(20) DEFAULT 'em_andamento'",
         "status_note": "TEXT",
@@ -47,3 +50,29 @@ def init_db() -> None:
         with engine.begin() as connection:
             for name, definition in missing:
                 connection.execute(text(f"ALTER TABLE fights ADD COLUMN {name} {definition}"))
+    if "result" in columns:
+        with engine.begin() as connection:
+            connection.execute(text("UPDATE fights SET result = NULL WHERE result = 'empate'"))
+    columns = {column["name"] for column in inspect(engine).get_columns("fights")}
+    result_columns = {
+        "robot_red",
+        "robot_green",
+        "winner_robot",
+        "result",
+        "duration_seconds",
+        "fps",
+        "robot_aliases",
+        "status",
+    }
+    if result_columns <= columns:
+        from metrics import apply_hit_result
+
+        with Session(engine) as session:
+            fights = session.scalars(
+                select(Fight)
+                .options(selectinload(Fight.hits))
+                .where(Fight.status == "encerrada", Fight.winner_robot.is_(None))
+            ).all()
+            for fight in fights:
+                apply_hit_result(fight)
+            session.commit()
