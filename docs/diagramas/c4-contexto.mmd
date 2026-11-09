@@ -1,0 +1,12 @@
+flowchart LR
+  analyst["Analista/equipe<br/>registra e consulta lutas"]
+  hittrack["HitTrack<br/>lutas, hits, métricas<br/>e dashboards"]
+  detector["hitcount-ia<br/>análise de vídeo externa"]
+  robo["RoboCore<br/>fonte externa do ranking"]
+  prom["Prometheus<br/>scrape de /metrics"]
+  grafana["Grafana<br/>dashboard operacional"]
+  analyst -->|"HTTPS/REST"| hittrack
+  detector -->|"eventos de análise"| hittrack
+  robo -->|"snapshot por categoria"| hittrack
+  prom -->|"HTTP /metrics"| hittrack
+  grafana -->|"consulta PromQL"| prom

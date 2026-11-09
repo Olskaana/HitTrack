@@ -1,0 +1,11 @@
+flowchart LR
+  view["View<br/>páginas e componentes React<br/>formulários/gráficos"]
+  vm["ViewModel conceitual<br/>hooks, estado e ações<br/>fetch e filtros"]
+  model["Model/API<br/>payloads de luta e métricas<br/>REST + persistência"]
+  user["Pessoa usuária"]
+  backend["Backend FastAPI"]
+  user -->|"interage"| view
+  view -->|"eventos e estado"| vm
+  vm -->|"dados de apresentação"| view
+  vm -->|"HTTP/JSON"| model
+  model -->|"consulta/atualiza"| backend

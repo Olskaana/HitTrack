@@ -63,6 +63,25 @@ def test_fight_create_accepts_required_competition_fields():
     assert fight.status == "encerrada"
 
 
+@pytest.mark.parametrize(
+    "category",
+    [
+        "fairyweight",
+        "termiteweight",
+        "antweight",
+        "pastic-ant",
+        "beetleweight",
+        "hobbyweight",
+        "featherweight",
+        "lightweight",
+        "middleweight",
+        "heavyweight",
+    ],
+)
+def test_fight_create_accepts_robo_core_combat_categories(category):
+    assert FightCreate(**valid_fight(category=category)).category == category
+
+
 @pytest.mark.parametrize("field", ["competition", "team_red", "team_green", "category"])
 def test_fight_create_requires_competition_category_and_teams(field):
     payload = valid_fight()

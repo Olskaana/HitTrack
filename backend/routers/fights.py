@@ -87,6 +87,7 @@ def list_fights(db: Session = Depends(get_db)):
             status_note=fight.status_note,
             result=fight.result,
             winner_robot=fight.winner_robot,
+            is_test=fight.is_test,
             total_hits=len(fight.hits),
             duration_seconds=fight.duration_seconds,
         )

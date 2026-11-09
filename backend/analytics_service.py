@@ -8,6 +8,7 @@ from models import Fight
 
 
 OUTCOMES = ("vitoria", "derrota")
+TIMELINE_INTERVALS = 10
 
 
 def filter_fights(
@@ -18,9 +19,12 @@ def filter_fights(
     competition: str | None = None,
     robot: str | None = None,
     team: str | None = None,
+    include_test_data: bool = False,
 ) -> list[Fight]:
     selected = []
     for fight in fights:
+        if not include_test_data and getattr(fight, "is_test", False):
+            continue
         if category and fight.category != category:
             continue
         if competition and fight.competition != competition:
@@ -156,8 +160,19 @@ def calculate_analytics(fights: list[Fight]) -> dict[str, Any]:
 
     for fight in fights:
         normalized_hits: dict[str, int] = defaultdict(int)
+        hit_timeline = [
+            {"interval": index, "hits_red": 0, "hits_green": 0}
+            for index in range(TIMELINE_INTERVALS)
+        ]
+        duration_frames = max(fight.duration_seconds * fight.fps, 1)
         for hit in fight.hits:
-            normalized_hits[_normalize_robot(fight, hit.robot)] += 1
+            robot = _normalize_robot(fight, hit.robot)
+            normalized_hits[robot] += 1
+            interval = min(int(hit.frame / duration_frames * TIMELINE_INTERVALS), TIMELINE_INTERVALS - 1)
+            if robot == fight.robot_red:
+                hit_timeline[interval]["hits_red"] += 1
+            elif robot == fight.robot_green:
+                hit_timeline[interval]["hits_green"] += 1
 
         sides = (
             (fight.robot_red, fight.team_red, fight.elo_red),
@@ -191,6 +206,8 @@ def calculate_analytics(fights: list[Fight]) -> dict[str, Any]:
             {
                 "fight_id": fight.id,
                 "fought_at": fight.fought_at,
+                "created_at": getattr(fight, "created_at", None),
+                "status_note": getattr(fight, "status_note", None),
                 "category": fight.category,
                 "competition": fight.competition,
                 "robot_red": red[0],
@@ -199,6 +216,8 @@ def calculate_analytics(fights: list[Fight]) -> dict[str, Any]:
                 "team_green": green[1],
                 "hits_red": red[2],
                 "hits_green": green[2],
+                "has_hit_events": bool(fight.hits),
+                "hit_timeline": hit_timeline,
                 "elo_red": red[3],
                 "elo_green": green[3],
                 "outcome_red": red[4],

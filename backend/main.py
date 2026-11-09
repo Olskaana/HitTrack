@@ -22,6 +22,8 @@ from metrics import apply_hit_result
 from monitoring import collect_http_metrics, metrics_app
 from routers.analytics import router as analytics_router
 from routers.fights import router as fights_router
+from routers.rankings import router as rankings_router
+from robo_core_rankings import start_daily_refresh
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,6 +37,7 @@ from detector import CamWorker  # noqa: E402
 app = FastAPI(title="HitTrack API", version="1.0")
 app.include_router(fights_router)
 app.include_router(analytics_router)
+app.include_router(rankings_router)
 app.middleware("http")(collect_http_metrics)
 app.mount("/metrics", metrics_app)
 app.add_middleware(
@@ -61,6 +64,7 @@ active_video = VIDEO_SRC
 @app.on_event("startup")
 def startup():
     init_db()
+    start_daily_refresh()
 
 
 def same_file(first: Path, second: Path) -> bool:

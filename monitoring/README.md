@@ -2,7 +2,7 @@
 
 O compose deste diretório sobe somente Prometheus e Grafana. A API HitTrack é iniciada separadamente no host com o detector configurado; o Prometheus a alcança por `host.docker.internal:8000`. Essa stack é local e não configura monitoramento para um deploy público.
 
-1. Inicie a API segundo [`docs/deployment.md`](../docs/deployment.md) e confirme que `http://127.0.0.1:8000/metrics` responde.
+1. Inicie a API segundo [Execução local e dependências](../README.md#20-execucao-local-e-dependencias) e confirme que `http://127.0.0.1:8000/metrics` responde.
 2. Na raiz do repositório, defina uma senha local do Grafana no terminal atual:
 
 ```powershell

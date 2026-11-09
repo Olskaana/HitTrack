@@ -1,0 +1,14 @@
+flowchart TB
+  start["Analista solicita análise"]
+  check["API verifica luta, vídeo<br/>e detector configurado"]
+  missing["Informa vídeo ausente<br/>ou dependência indisponível"]
+  worker["Worker processa vídeo<br/>e identifica eventos"]
+  persist["Persiste hits não duplicados<br/>associados à luta"]
+  calc["Agrupa hits por robô e período;<br/>calcula métricas"]
+  finish["Encerra luta e disponibiliza<br/>resultado/análise"]
+  start --> check
+  check -->|"pré-requisitos atendidos"| worker
+  check -->|"falha"| missing
+  worker --> persist
+  persist --> calc
+  calc --> finish

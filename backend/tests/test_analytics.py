@@ -249,9 +249,85 @@ def test_analytics_endpoint_returns_filtered_stats_and_chart_samples(api_client,
     assert data["robots"][0]["wins"] == 1
     assert data["fights"][0]["hits_red"] == 2
     assert data["fights"][0]["elo_red"] == 1000
+    assert data["fights"][0]["has_hit_events"] is True
+    assert data["fights"][0]["hit_timeline"][0] == {
+        "interval": 0,
+        "hits_red": 2,
+        "hits_green": 1,
+    }
+    assert data["fights"][0]["hit_timeline"][-1] == {
+        "interval": 9,
+        "hits_red": 0,
+        "hits_green": 0,
+    }
+
+
+def test_analytics_timeline_uses_hit_frames_and_normalized_robot_aliases():
+    fight = create_fight(
+        1,
+        "Robo A",
+        "Robo B",
+        "Equipe A",
+        "Equipe B",
+        0,
+        0,
+    )
+    fight.duration_seconds = 10
+    fight.fps = 10
+    fight.robot_aliases = {"A": "Robo A", "B": "Robo B"}
+    fight.hits = [
+        SimpleNamespace(frame=0, robot="A"),
+        SimpleNamespace(frame=49, robot="A"),
+        SimpleNamespace(frame=50, robot="B"),
+        SimpleNamespace(frame=100, robot="B"),
+    ]
+
+    sample = calculate_analytics([fight])["fights"][0]
+
+    assert [bucket["hits_red"] for bucket in sample["hit_timeline"]] == [1, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+    assert [bucket["hits_green"] for bucket in sample["hit_timeline"]] == [0, 0, 0, 0, 0, 1, 0, 0, 0, 1]
 
 
 def test_analytics_endpoint_rejects_reversed_date_range(api_client):
     response = api_client.get("/api/analytics?start_date=2026-06-02&end_date=2026-06-01")
 
     assert response.status_code == 422
+
+
+def test_analytics_excludes_test_fights_by_default_and_can_include_them(api_client, db_session):
+    from models import Fight
+
+    db_session.add_all(
+        [
+            Fight(
+                robot_red="Real A",
+                robot_green="Real B",
+                team_red="Team A",
+                team_green="Team B",
+                duration_seconds=60,
+                fps=30,
+                is_test=False,
+            ),
+            Fight(
+                robot_red="Test A",
+                robot_green="Test B",
+                team_red="Test Team A",
+                team_green="Test Team B",
+                duration_seconds=60,
+                fps=30,
+                is_test=True,
+            ),
+        ]
+    )
+    db_session.commit()
+
+    real_only = api_client.get("/api/analytics")
+    with_tests = api_client.get("/api/analytics?include_test_data=true")
+
+    assert real_only.status_code == 200
+    assert real_only.json()["fight_count"] == 1
+    assert real_only.json()["include_test_data"] is False
+    assert {item["robot"] for item in real_only.json()["robots"]} == {"Real A", "Real B"}
+    assert with_tests.status_code == 200
+    assert with_tests.json()["fight_count"] == 2
+    assert with_tests.json()["include_test_data"] is True

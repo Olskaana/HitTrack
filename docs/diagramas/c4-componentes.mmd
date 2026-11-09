@@ -1,0 +1,19 @@
+flowchart LR
+  frontend["Frontend<br/>React + Vite"]
+  fights["Rotas de lutas<br/>cadastro, vídeo e hits"]
+  analytics["Rotas/serviço analítico<br/>filtros e agregações"]
+  ranking["Rotas/importador ranking<br/>snapshot RoboCore"]
+  metrics["Serviço de métricas<br/>hits e linha do tempo"]
+  persistence["SQLAlchemy + modelos<br/>PostgreSQL"]
+  detector["Detector externo<br/>hitcount-ia"]
+  robo["RoboCore<br/>fonte do ranking"]
+  monitor["Instrumentação HTTP<br/>exposição /metrics"]
+  frontend -->|"REST"| fights
+  frontend -->|"REST"| analytics
+  frontend -->|"REST"| ranking
+  fights -->|"calcula"| metrics
+  fights -->|"consulta/persiste"| persistence
+  analytics -->|"lê dados"| persistence
+  ranking -->|"grava snapshot"| persistence
+  detector -->|"eventos"| fights
+  robo -->|"HTTP"| ranking

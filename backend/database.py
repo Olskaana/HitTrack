@@ -31,7 +31,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
-    from models import Fight, HitEvent  # noqa: F401
+    from models import Fight, HitEvent, RankingEntry, RankingSnapshot  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
     columns = {column["name"] for column in inspect(engine).get_columns("fights")}
@@ -50,6 +50,12 @@ def init_db() -> None:
         with engine.begin() as connection:
             for name, definition in missing:
                 connection.execute(text(f"ALTER TABLE fights ADD COLUMN {name} {definition}"))
+    if "is_test" not in columns:
+        with engine.begin() as connection:
+            connection.execute(
+                text("ALTER TABLE fights ADD COLUMN is_test BOOLEAN NOT NULL DEFAULT FALSE")
+            )
+            connection.execute(text("UPDATE fights SET is_test = TRUE"))
     if "result" in columns:
         with engine.begin() as connection:
             connection.execute(text("UPDATE fights SET result = NULL WHERE result = 'empate'"))

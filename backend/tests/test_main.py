@@ -98,11 +98,14 @@ def test_same_file_rejects_files_with_different_sizes(main_module, tmp_path):
 
 def test_startup_initializes_hittrack_database(main_module, monkeypatch):
     initialized = []
+    scheduler_started = []
     monkeypatch.setattr(main_module, "init_db", lambda: initialized.append(True))
+    monkeypatch.setattr(main_module, "start_daily_refresh", lambda: scheduler_started.append(True))
 
     main_module.startup()
 
     assert initialized == [True]
+    assert scheduler_started == [True]
 
 
 def test_load_reference_hits_handles_valid_and_invalid_files(main_module, tmp_path, capsys):

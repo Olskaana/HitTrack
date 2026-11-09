@@ -1,0 +1,7 @@
+flowchart LR
+  fight["FIGHT<br/>PK id<br/>competition, fought_at<br/>robot_red, robot_green<br/>status, result, ELOs"]
+  hit["HIT_EVENT<br/>PK id<br/>FK fight_id<br/>frame, robot<br/>source_robot"]
+  snapshot["RANKING_SNAPSHOT<br/>PK id<br/>category, source_url<br/>imported_at"]
+  entry["RANKING_ENTRY<br/>PK id<br/>FK snapshot_id<br/>rank, ELO, robot/team<br/>record, URL"]
+  fight -->|"1 : N"| hit
+  snapshot -->|"1 : N"| entry

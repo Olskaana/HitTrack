@@ -35,7 +35,30 @@ def test_init_db_adds_missing_fight_columns(monkeypatch):
         "category",
         "status",
         "status_note",
+        "is_test",
     } <= columns
+    engine.dispose()
+
+
+def test_init_db_marks_existing_fights_as_test_data(monkeypatch):
+    engine = create_engine("sqlite://")
+    with engine.begin() as connection:
+        connection.execute(text("CREATE TABLE fights (id INTEGER PRIMARY KEY)"))
+        connection.execute(text("INSERT INTO fights (id) VALUES (1), (2)"))
+    monkeypatch.setattr(database, "engine", engine)
+
+    database.init_db()
+
+    with engine.connect() as connection:
+        values = connection.execute(text("SELECT is_test FROM fights ORDER BY id")).scalars().all()
+    assert values == [1, 1]
+
+    with engine.begin() as connection:
+        connection.execute(text("UPDATE fights SET is_test = FALSE WHERE id = 2"))
+    database.init_db()
+    with engine.connect() as connection:
+        values = connection.execute(text("SELECT is_test FROM fights ORDER BY id")).scalars().all()
+    assert values == [1, 0]
     engine.dispose()
 
 

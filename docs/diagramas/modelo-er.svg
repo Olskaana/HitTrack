@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 800" role="img" aria-labelledby="title desc">
+<title id="title">Persistência | Modelo entidade-relacionamento</title>
+<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">Persistência | Modelo entidade-relacionamento</text>
+<path d="M 425 300 L 635 300" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="530" y="293" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">1 : N</text>
+<path d="M 425 600 L 635 600" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="530" y="593" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">1 : N</text>
+<rect x="175" y="250" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="300" y="264" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">FIGHT</text>
+<text x="300" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
+<text x="300" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">competition, fought_at</text>
+<text x="300" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">robot_red, robot_green</text>
+<text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">status, result, ELOs</text>
+<rect x="635" y="250" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="760" y="264" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">HIT_EVENT</text>
+<text x="760" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
+<text x="760" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">FK fight_id</text>
+<text x="760" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">frame, robot</text>
+<text x="760" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">source_robot</text>
+<rect x="175" y="550" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="300" y="573" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RANKING_SNAPSHOT</text>
+<text x="300" y="592" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
+<text x="300" y="611" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">category, source_url</text>
+<text x="300" y="630" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">imported_at</text>
+<rect x="635" y="550" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="760" y="564" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RANKING_ENTRY</text>
+<text x="760" y="583" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
+<text x="760" y="602" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">FK snapshot_id</text>
+<text x="760" y="621" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">rank, ELO, robot/team</text>
+<text x="760" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">record, URL</text>
+</svg>
