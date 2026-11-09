@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 710" role="img" aria-labelledby="title desc">
+<title id="title">Frontend | Mapeamento MVVM conceitual</title>
+<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">Frontend | Mapeamento MVVM conceitual</text>
+<path d="M 250 200 L 250 310" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="250" y="248" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">interage</text>
+<path d="M 375 360 L 495 360" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="435" y="353" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">eventos e estado</text>
+<path d="M 495 360 L 375 360" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="435" y="353" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">dados de apresentação</text>
+<path d="M 745 360 L 865 360" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="805" y="353" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">HTTP/JSON</text>
+<path d="M 990 410 L 990 520" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="990" y="458" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">consulta/atualiza</text>
+<rect x="125" y="310" width="250" height="100" rx="14" fill="#eef2ff" stroke="#6376b5" stroke-width="2"/>
+<text x="250" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">View</text>
+<text x="250" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">páginas e componentes React</text>
+<text x="250" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">formulários/gráficos</text>
+<rect x="495" y="310" width="250" height="100" rx="14" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
+<text x="620" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">ViewModel conceitual</text>
+<text x="620" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">hooks, estado e ações</text>
+<text x="620" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">fetch e filtros</text>
+<rect x="865" y="310" width="250" height="100" rx="14" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
+<text x="990" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Model/API</text>
+<text x="990" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">payloads de luta e métricas</text>
+<text x="990" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">REST + persistência</text>
+<rect x="125" y="100" width="250" height="100" rx="14" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="250" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Pessoa usuária</text>
+<rect x="865" y="520" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="990" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Backend FastAPI</text>
+</svg>

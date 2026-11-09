@@ -5,7 +5,18 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 Result = Literal["vitoria", "derrota"]
-Category = Literal["fairyweight", "antweight", "beetleweight", "hobbyweight"]
+Category = Literal[
+    "fairyweight",
+    "termiteweight",
+    "antweight",
+    "pastic-ant",
+    "beetleweight",
+    "hobbyweight",
+    "featherweight",
+    "lightweight",
+    "middleweight",
+    "heavyweight",
+]
 FightStatus = Literal["em_andamento", "encerrada"]
 
 
@@ -27,6 +38,7 @@ class FightCreate(BaseModel):
     elo_red: float | None = None
     elo_green: float | None = None
     robot_aliases: dict[str, str] = Field(default_factory=dict)
+    is_test: bool = False
 
     @model_validator(mode="after")
     def validate_winner(self):
@@ -86,6 +98,7 @@ class FightSummary(BaseModel):
     winner_robot: str | None
     total_hits: int
     duration_seconds: float
+    is_test: bool = False
 
 
 class RobotMetrics(BaseModel):
@@ -93,6 +106,7 @@ class RobotMetrics(BaseModel):
     hits: int
     hits_per_minute: float
     third_distribution: list[int]
+    hit_timeline: list[int]
 
 
 class FightMetrics(BaseModel):
@@ -140,9 +154,17 @@ class TeamAnalytics(BaseModel):
     outcomes: list[OutcomeAnalytics]
 
 
+class HitTimelineBucket(BaseModel):
+    interval: int
+    hits_red: int
+    hits_green: int
+
+
 class FightAnalyticsSample(BaseModel):
     fight_id: int
     fought_at: datetime | None
+    created_at: datetime | None
+    status_note: str | None
     category: Category | None
     competition: str | None
     robot_red: str
@@ -151,6 +173,8 @@ class FightAnalyticsSample(BaseModel):
     team_green: str | None
     hits_red: int
     hits_green: int
+    has_hit_events: bool
+    hit_timeline: list[HitTimelineBucket]
     elo_red: float | None
     elo_green: float | None
     outcome_red: Result | None
@@ -165,6 +189,29 @@ class AnalyticsResponse(BaseModel):
     competition: str | None
     robot: str | None
     team: str | None
+    include_test_data: bool
     robots: list[RobotAnalytics]
     teams: list[TeamAnalytics]
     fights: list[FightAnalyticsSample]
+
+
+class RankingEntryResponse(BaseModel):
+    rank_position: int
+    elo_score: float
+    robot_name: str
+    team_name: str | None
+    robot_source_id: int
+    total_fights: int
+    wins: int
+    losses: int
+    latest_fight_at: datetime | None
+    robot_url: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RankingResponse(BaseModel):
+    category: Category
+    source_url: str
+    imported_at: datetime | None
+    entries: list[RankingEntryResponse]

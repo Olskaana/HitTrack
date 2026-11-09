@@ -17,14 +17,17 @@ def calculate_metrics(fight: Fight) -> FightMetrics:
     for robot in (fight.robot_red, fight.robot_green):
         frames = grouped.get(robot, [])
         thirds = [0, 0, 0]
+        hit_timeline = [0] * 10
         for frame in frames:
             thirds[min(int(frame / duration_frames * 3), 2)] += 1
+            hit_timeline[min(int(frame / duration_frames * 10), 9)] += 1
         metrics.append(
             RobotMetrics(
                 robot=robot,
                 hits=len(frames),
                 hits_per_minute=round(len(frames) / fight.duration_seconds * 60, 3),
                 third_distribution=thirds,
+                hit_timeline=hit_timeline,
             )
         )
 

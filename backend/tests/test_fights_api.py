@@ -37,6 +37,9 @@ def test_fight_lifecycle_and_metrics(api_client):
     assert metrics["total_hits"] == 2
     assert metrics["robots"][0]["third_distribution"] == [1, 0, 0]
     assert metrics["robots"][1]["third_distribution"] == [0, 1, 0]
+    assert len(metrics["robots"][0]["hit_timeline"]) == 10
+    assert metrics["robots"][0]["hit_timeline"][0] == 1
+    assert metrics["robots"][1]["hit_timeline"][5] == 1
 
     listed = api_client.get("/api/fights")
     assert listed.status_code == 200

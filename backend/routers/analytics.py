@@ -21,6 +21,7 @@ def read_analytics(
     competition: str | None = Query(default=None, max_length=160),
     robot: str | None = Query(default=None, max_length=120),
     team: str | None = Query(default=None, max_length=120),
+    include_test_data: bool = False,
     db: Session = Depends(get_db),
 ):
     if start_date and end_date and start_date > end_date:
@@ -37,6 +38,7 @@ def read_analytics(
         competition,
         robot,
         team,
+        include_test_data,
     )
     result = calculate_analytics(selected_fights)
     return {
@@ -47,4 +49,5 @@ def read_analytics(
         "competition": competition,
         "robot": robot,
         "team": team,
+        "include_test_data": include_test_data,
     }

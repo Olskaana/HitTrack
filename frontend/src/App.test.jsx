@@ -49,8 +49,8 @@ const metrics = {
   duration_seconds: 120,
   total_hits: 7,
   robots: [
-    { robot: "Robo Alfa", hits: 5, hits_per_minute: 2.5, third_distribution: [2, 2, 1] },
-    { robot: "Robo Beta", hits: 2, hits_per_minute: 1, third_distribution: [1, 0, 1] },
+    { robot: "Robo Alfa", hits: 5, hits_per_minute: 2.5, third_distribution: [2, 2, 1], hit_timeline: [1, 0, 1, 0, 1, 0, 0, 0, 1, 1] },
+    { robot: "Robo Beta", hits: 2, hits_per_minute: 1, third_distribution: [1, 0, 1], hit_timeline: [0, 0, 0, 1, 0, 0, 0, 0, 0, 1] },
   ],
 };
 
@@ -125,6 +125,14 @@ const analytics = {
       elo_green: 900,
       outcome_red: "vitoria",
       outcome_green: "derrota",
+      created_at: null,
+      status_note: null,
+      has_hit_events: true,
+      hit_timeline: Array.from({ length: 10 }, (_, interval) => ({
+        interval,
+        hits_red: interval === 0 ? 2 : 0,
+        hits_green: interval === 5 ? 1 : 0,
+      })),
     },
   ],
 };
@@ -146,6 +154,7 @@ function mockApi(respond = defaultApiResponse) {
 
 function defaultApiResponse(path) {
   if (path === "http://127.0.0.1:8000/") return jsonResponse({ status: "backend alive" });
+  if (path.startsWith("http://127.0.0.1:8000/api/rankings?category=")) return jsonResponse({ entries: [] });
   if (path === "http://127.0.0.1:8000/api/fights") return jsonResponse(fights);
   if (path === "http://127.0.0.1:8000/api/fights/1") return jsonResponse(fight);
   if (path === "http://127.0.0.1:8000/api/fights/1/metrics") return jsonResponse(metrics);
@@ -192,6 +201,9 @@ function fillRequiredFightFields() {
   enterNewEntity("Equipe do lado verde", "Time B");
   enterNewEntity("Competição", "Copa Robótica");
   chooseFightCategory();
+  fireEvent.change(document.querySelector('.new-fight-form input[type="number"][min="1"]'), {
+    target: { value: "30" },
+  });
 }
 
 function chooseFightCategory(label = "Antweight · 454 g") {
@@ -308,6 +320,38 @@ describe("HitTrack dashboard", () => {
     expect(screen.queryByRole("button", { name: /Robo Alfa/ })).not.toBeInTheDocument();
   });
 
+  it("paginates fight history and resets to the first page when filtered", async () => {
+    const manyFights = Array.from({ length: 12 }, (_, index) => ({
+      ...fights[0],
+      id: index + 1,
+      robot_red: `Robo ${index + 1}`,
+      robot_green: `Oponente ${index + 1}`,
+    }));
+    mockApi((path, options) => {
+      if (path === "http://127.0.0.1:8000/api/fights") return jsonResponse(manyFights);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Histórico");
+
+    expect(await screen.findByRole("navigation", { name: "Paginação do histórico" })).toBeInTheDocument();
+    expect(document.querySelectorAll(".history-entry")).toHaveLength(10);
+    expect(screen.getByText("#01")).toBeInTheDocument();
+    expect(screen.getByText("#10")).toBeInTheDocument();
+    expect(screen.queryByText("#11")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Próxima página do histórico" }));
+    expect(screen.getByText("Página 2 de 2")).toBeInTheDocument();
+    expect(document.querySelectorAll(".history-entry")).toHaveLength(2);
+    expect(screen.getByText("#11")).toBeInTheDocument();
+    expect(screen.getByText("#12")).toBeInTheDocument();
+
+    changeHistoryFilter("Robô", "Robo 12");
+    expect(screen.getByRole("button", { name: /Robo 12/ })).toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Paginação do histórico" })).not.toBeInTheDocument();
+    expect(screen.getByText("1 de 12 lutas")).toBeInTheDocument();
+  });
+
   it("shows a hit-based winner in the fight history", async () => {
     render(<App />);
     clickTab("Histórico");
@@ -315,7 +359,7 @@ describe("HitTrack dashboard", () => {
     expect(await screen.findByText("Robo Alfa venceu por hits")).toBeInTheDocument();
   });
 
-  it("shows aggregate analytics, the team profile, and both charts", async () => {
+  it("shows aggregate analytics, the team profile, and all extended insights", async () => {
     mockApi((path, options) => {
       if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(analytics);
       return defaultApiResponse(path, options);
@@ -326,11 +370,328 @@ describe("HitTrack dashboard", () => {
     expect(await screen.findByRole("heading", { name: "Dispersão ELO × hits" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Hits por luta e robô" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Resumo e eficácia" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Hits ao longo da luta" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tendência por robô" })).toBeInTheDocument();
+    expect(screen.queryByText("Margem de desempenho")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Por categoria" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Por competição" })).toBeInTheDocument();
+    expect(screen.queryByText("Taxa de vitórias")).not.toBeInTheDocument();
+    expect(screen.queryByText(/considera somente resultados registrados/)).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Cobertura dos dados" })).toBeInTheDocument();
     expect(screen.getByText("Equipe A")).toBeInTheDocument();
     expect(screen.getAllByTestId("elo-scatter-point")).toHaveLength(2);
     expect(screen.getByRole("img", { name: "Histograma de hits por robô e luta" })).toBeInTheDocument();
+    const rhythmChart = screen.getByRole("img", { name: "Média de hits por intervalo da luta" });
+    expect(rhythmChart).toBeInTheDocument();
+    expect(rhythmChart.querySelectorAll("circle")).toHaveLength(20);
+    expect(screen.getByText(/3 hits distribuídos em 1 luta/)).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Evolução de hits por robô ao longo das lutas" })).toBeInTheDocument();
+    expect(screen.getByText("Com eventos de hits")).toBeInTheDocument();
+    expect(screen.getByText("Com ELO dos dois robôs")).toBeInTheDocument();
     expect(screen.getAllByText("1/3 pares")).toHaveLength(4);
     expect(screen.getAllByText("1/2 lutas")).toHaveLength(3);
+
+    const tooltipDescriptions = [
+      ["Sobre Correlação", "Cada ponto representa um robô em uma luta"],
+      ["Sobre Distribuição", "Quantidade de participações de robôs em lutas"],
+      ["Sobre Hits da equipe", "Total de hits registrados pelos robôs da equipe"],
+      ["Sobre Hits por minuto", "Total de hits dividido pela duração total"],
+      ["Sobre Desvio padrão da equipe", "Indica quanto o total de hits da equipe varia entre as lutas"],
+      ["Sobre Desvio padrão do robô", "Indica quanto o total de hits do robô varia entre as lutas"],
+      ["Sobre Pearson (ELO)", "Mede a relação linear entre o ELO pré-luta e os hits"],
+      ["Sobre Spearman (ELO)", "Mede se ELO e hits tendem a aumentar ou diminuir juntos"],
+    ];
+    for (const [label, description] of tooltipDescriptions) {
+      const button = screen.getByRole("button", { name: label });
+      expect(document.getElementById(button.getAttribute("aria-describedby"))).toHaveTextContent(description);
+    }
+
+    const hitsPerMinuteButton = screen.getByRole("button", { name: "Sobre Hits por minuto" });
+    fireEvent.mouseEnter(hitsPerMinuteButton);
+    const hitsPerMinuteTooltip = document.getElementById(hitsPerMinuteButton.getAttribute("aria-describedby"));
+    expect(hitsPerMinuteTooltip).toHaveClass("tooltip-hint__content--floating", "is-visible");
+    expect(hitsPerMinuteTooltip.style.left).not.toBe("");
+    expect(hitsPerMinuteTooltip.style.top).not.toBe("");
+    fireEvent.mouseLeave(hitsPerMinuteButton);
+    fireEvent.mouseEnter(hitsPerMinuteTooltip);
+    expect(hitsPerMinuteTooltip).toHaveClass("is-visible");
+  });
+
+  it("can include test fights in performance analytics", async () => {
+    const calls = [];
+    mockApi((path, options) => {
+      calls.push(path);
+      if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(analytics);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Desempenho");
+    fireEvent.click(await screen.findByRole("checkbox", { name: "Incluir lutas de teste" }));
+
+    await waitFor(() => expect(calls).toContain(
+      "http://127.0.0.1:8000/api/analytics?include_test_data=true",
+    ));
+  });
+
+  it("offers robots and teams from test fights in performance filters", async () => {
+    const calls = [];
+    const testFight = {
+      ...fights[0],
+      id: 3,
+      is_test: true,
+      robot_red: "Robo de Teste",
+      team_red: "Equipe de Teste",
+    };
+    mockApi((path, options) => {
+      calls.push(path);
+      if (path === "http://127.0.0.1:8000/api/fights") return jsonResponse([...fights, testFight]);
+      if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(analytics);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Desempenho");
+    fireEvent.click(await screen.findByRole("checkbox", { name: "Incluir lutas de teste" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Robô" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Robo de Teste" }));
+    fireEvent.click(screen.getByRole("button", { name: "Equipe" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Equipe de Teste" }));
+
+    await waitFor(() => expect(calls).toContain(
+      "http://127.0.0.1:8000/api/analytics?robot=Robo+de+Teste&team=Equipe+de+Teste&include_test_data=true",
+    ));
+  });
+
+  it("loads and manually refreshes a RoboCore ranking by category", async () => {
+    const calls = [];
+    const ranking = {
+      category: "antweight",
+      source_url: "https://rank.robocore.net/antweight",
+      imported_at: "2026-11-04T12:00:00",
+      entries: [{
+        rank_position: 1,
+        elo_score: 1450.25,
+        robot_name: "Robo Alpha",
+        team_name: "Team Alpha",
+        robot_source_id: 123,
+        total_fights: 20,
+        wins: 14,
+        losses: 6,
+        latest_fight_at: "2026-10-12T16:56:16",
+        robot_url: "https://rank.robocore.net/history/123",
+      }],
+    };
+    mockApi((path, options) => {
+      calls.push([path, options]);
+      if (path.startsWith("http://127.0.0.1:8000/api/rankings")) return jsonResponse(ranking);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Ranking");
+
+    expect(await screen.findByRole("link", { name: "Robo Alpha" })).toHaveAttribute(
+      "href",
+      "https://rank.robocore.net/history/123",
+    );
+    const expectedImportedAt = new Intl.DateTimeFormat("pt-BR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date("2026-11-04T12:00:00Z"));
+    expect(screen.getByText(`Atualizado em ${expectedImportedAt}`)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Categoria" }));
+    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar categoria" }), {
+      target: { value: "fairyweight" },
+    });
+    fireEvent.click(await screen.findByRole("option", { name: "Fairyweight · 150 g" }));
+    await waitFor(() => expect(calls.map(([path]) => path)).toContain(
+      "http://127.0.0.1:8000/api/rankings?category=fairyweight",
+    ));
+    fireEvent.click(screen.getByRole("button", { name: "Atualizar ranking" }));
+    await waitFor(() => expect(calls.some(([path, options]) => (
+      path === "http://127.0.0.1:8000/api/rankings/refresh?category=fairyweight"
+      && options.method === "POST"
+    ))).toBe(true));
+  });
+
+  it("shows ranking tables with shared pagination and sorting", async () => {
+    const ranking = {
+      category: "antweight",
+      source_url: "https://rank.robocore.net/antweight",
+      imported_at: "2026-11-04T12:00:00",
+      entries: Array.from({ length: 32 }, (_, index) => ({
+        rank_position: index + 1,
+        elo_score: 1400 - index,
+        robot_name: `Robot ${index + 1}`,
+        team_name: "Test Team",
+        robot_source_id: index + 1,
+        total_fights: 10,
+        wins: 6,
+        losses: 4,
+        latest_fight_at: null,
+        robot_url: `https://rank.robocore.net/history/${index + 1}`,
+      })),
+    };
+    mockApi((path, options) => {
+      if (path.startsWith("http://127.0.0.1:8000/api/rankings")) return jsonResponse(ranking);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Ranking");
+
+    expect(await screen.findByRole("link", { name: "Robot 1" })).toBeInTheDocument();
+    expect(screen.getAllByRole("row")).toHaveLength(11);
+    expect(screen.queryByRole("link", { name: "Robot 11" })).not.toBeInTheDocument();
+    expect(screen.getByText("Robôs 1–10 de 32")).toBeInTheDocument();
+    for (const robotField of ["Robô vermelho da simulação", "Robô verde da simulação"]) {
+      fireEvent.click(screen.getByRole("button", { name: robotField }));
+      fireEvent.change(screen.getByRole("searchbox", { name: `Buscar ${robotField.toLocaleLowerCase()}` }), {
+        target: { value: "Robot 32" },
+      });
+      expect(await screen.findByRole("option", { name: "Robot 32 · ELO 1369.00" })).toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: robotField }));
+    }
+
+    fireEvent.click(screen.getByRole("button", { name: "Ir para a última página do ranking" }));
+    expect(await screen.findByRole("link", { name: "Robot 32" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 31–32 de 32")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ir para a primeira página do ranking" }));
+    expect(await screen.findByRole("link", { name: "Robot 1" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 1–10 de 32")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Ordenar por ELO RoboCore" }));
+    expect(await screen.findByRole("link", { name: "Robot 32" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /ELO RoboCore/ })).toHaveAttribute("aria-sort", "ascending");
+    expect(screen.getByText("Robôs 1–10 de 32")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Próxima página do ranking" }));
+    expect(await screen.findByRole("link", { name: "Robot 22" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Robot 13" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Robot 23" })).not.toBeInTheDocument();
+    expect(screen.getByText("Robôs 11–20 de 32")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Ir para a última página do ranking" }));
+    expect(await screen.findByRole("link", { name: "Robot 1" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Robot 2" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 31–32 de 32")).toBeInTheDocument();
+  });
+
+  it("sorts and paginates analytics tables using the shared controls", async () => {
+    const extendedAnalytics = {
+      ...analytics,
+      robots: Array.from({ length: 12 }, (_, index) => ({
+        ...analytics.robots[0],
+        robot: `Robot ${index + 1}`,
+        fight_count: index + 1,
+      })),
+    };
+    mockApi((path, options) => {
+      if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(extendedAnalytics);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Desempenho");
+
+    const heading = await screen.findByRole("heading", { name: "Robôs, resultados e ELO" });
+    const panel = heading.closest("article");
+    const table = within(panel).getByRole("table");
+    expect(within(table).getAllByRole("row")).toHaveLength(11);
+    expect(within(table).getByRole("rowheader", { name: "Robot 1" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 1–10 de 12")).toBeInTheDocument();
+
+    fireEvent.click(within(table).getByRole("button", { name: "Ordenar por Lutas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Próxima página dos robôs" }));
+    expect(within(table).getByRole("rowheader", { name: "Robot 11" })).toBeInTheDocument();
+    expect(within(table).getByRole("rowheader", { name: "Robot 12" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 11–12 de 12")).toBeInTheDocument();
+
+    fireEvent.click(within(table).getByRole("button", { name: "Ordenar por Lutas" }));
+    expect(within(table).getByRole("rowheader", { name: "Robot 12" })).toBeInTheDocument();
+    expect(screen.getByText("Robôs 1–10 de 12")).toBeInTheDocument();
+  });
+
+  it("labels fictional demo fights in performance analytics", async () => {
+    const simulatedAnalytics = {
+      ...analytics,
+      fights: analytics.fights.map((item) => ({
+        ...item,
+        status_note: "Dado fictício de demonstração — não corresponde a combate ou resultado oficial.",
+      })),
+    };
+    mockApi((path, options) => {
+      if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(simulatedAnalytics);
+      return defaultApiResponse(path, options      );
+    });
+
+    render(<App />);
+    clickTab("Desempenho");
+
+    expect(await screen.findByRole("note")).toHaveTextContent(
+      "robôs, equipes e resultados fictícios",
+    );
+  });
+
+  it("filters combat rhythm and historical trend by the selected robot", async () => {
+    mockApi((path, options) => {
+      if (path.startsWith("http://127.0.0.1:8000/api/analytics")) return jsonResponse(analytics);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Desempenho");
+
+    const rhythmChart = await screen.findByRole("img", { name: "Média de hits por intervalo da luta" });
+    const rhythmPanel = screen.getByRole("heading", { name: "Hits ao longo da luta" }).closest("article");
+    const trendPanel = screen.getByRole("heading", { name: "Tendência por robô" }).closest("article");
+    expect(rhythmChart.querySelectorAll("circle")).toHaveLength(20);
+
+    fireEvent.change(within(rhythmPanel).getByRole("combobox", { name: "Robô do ritmo do combate" }), {
+      target: { value: "Robo A" },
+    });
+    expect(within(rhythmPanel).getByRole("img", { name: "Média de hits por intervalo da luta" }).querySelectorAll("circle")).toHaveLength(10);
+    expect(within(rhythmPanel).getByText("Robo A (1 luta)")).toBeInTheDocument();
+    expect(within(rhythmPanel).queryByText("Robo B (1 luta)")).not.toBeInTheDocument();
+
+    fireEvent.change(within(trendPanel).getByRole("combobox", { name: "Robô da tendência histórica" }), {
+      target: { value: "Robo B" },
+    });
+    expect(within(trendPanel).getByRole("img", { name: "Evolução de hits por robô ao longo das lutas" }).querySelectorAll("circle")).toHaveLength(1);
+    const trendLegend = trendPanel.querySelector(".analytics-chart-legend");
+    expect(within(trendLegend).getByText("Robo B")).toBeInTheDocument();
+    expect(within(trendLegend).queryByText("Robo A")).not.toBeInTheDocument();
+  });
+
+  it("simulates Elo changes from selected ranked robots without creating a fight", async () => {
+    const calls = [];
+    const ranking = {
+      category: "antweight",
+      source_url: "https://rank.robocore.net/antweight",
+      imported_at: "2026-11-04T12:00:00",
+      entries: [
+        { rank_position: 1, elo_score: 1010, robot_name: "Robo Beta", team_name: "Team Beta", robot_source_id: 1 },
+        { rank_position: 2, elo_score: 1005, robot_name: "Robo Gamma", team_name: "Team Gamma", robot_source_id: 2 },
+        { rank_position: 3, elo_score: 1000, robot_name: "Robo Alpha", team_name: "Team Alpha", robot_source_id: 3 },
+      ],
+    };
+    mockApi((path, options) => {
+      calls.push([path, options]);
+      if (path.startsWith("http://127.0.0.1:8000/api/rankings")) return jsonResponse(ranking);
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Ranking");
+
+    fireEvent.click(await screen.findByRole("button", { name: "Robô vermelho da simulação" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Robo Alpha · ELO 1000.00" }));
+    fireEvent.click(screen.getByRole("button", { name: "Robô verde da simulação" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Robo Beta · ELO 1010.00" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Vencedor hipotético" }), {
+      target: { value: "Robo Alpha" },
+    });
+
+    expect(await screen.findByText("Variação estimada de ELO")).toBeInTheDocument();
+    expect(screen.getByLabelText("Variação de ELO de Robo Alpha")).toHaveTextContent("+17.84 pontos");
+    expect(screen.getByLabelText("Variação de ELO de Robo Beta")).toHaveTextContent("-17.84 pontos");
+    expect(screen.getByLabelText("Variação de ELO de Robo Alpha")).toHaveTextContent("Subiu 2 posições");
+    expect(calls.some(([path, options]) => path === "http://127.0.0.1:8000/api/fights" && options?.method === "POST")).toBe(false);
   });
 
   it("requests aggregate analytics when date and category filters change", async () => {
@@ -458,7 +819,49 @@ describe("HitTrack dashboard", () => {
     expect(screen.getByText("Hits registrados")).toBeInTheDocument();
     expect(screen.getByText("Eficiência por robô")).toBeInTheDocument();
     expect(screen.getByText("Onde os hits aconteceram")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Cadência por intervalo" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Cadência de hits por robô em dez intervalos da luta" })).toBeInTheDocument();
+    expect(screen.getByText("2.5/min · 71.4% dos hits")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "ELO antes da luta" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Sugestões para a próxima luta" })).toBeInTheDocument();
+    expect(screen.getByText(/Poderia ter mantido uma pressão ofensiva maior no segundo terço/)).toBeInTheDocument();
+    expect(screen.getByText(/Robo Alfa registrou 2 hits no segundo terço/)).toBeInTheDocument();
+    expect(screen.getByText(/não confirmam ataques recebidos nem falhas de defesa/)).toBeInTheDocument();
+  });
+
+  it("explains when a closed fight has no hit data for recommendations", async () => {
+    mockApi((path, options) => {
+      if (path === "http://127.0.0.1:8000/api/fights/1/metrics") {
+        return jsonResponse({
+          ...metrics,
+          total_hits: 0,
+          robots: metrics.robots.map((robot) => ({
+            ...robot,
+            hits: 0,
+            third_distribution: [0, 0, 0],
+          })),
+        });
+      }
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Análise");
+
+    expect(await screen.findByText("Esta luta não registrou hits; não há dados para sugerir melhorias.")).toBeInTheDocument();
+  });
+
+  it("does not show post-fight suggestions while the fight is ongoing", async () => {
+    mockApi((path, options) => {
+      if (path === "http://127.0.0.1:8000/api/fights/1") {
+        return jsonResponse({ ...fight, status: "em_andamento" });
+      }
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Análise");
+
+    expect(await screen.findByText("Onde os hits aconteceram")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Sugestões para a próxima luta" })).not.toBeInTheDocument();
   });
 
   it("saves pre-fight ELO for an existing fight", async () => {
@@ -548,7 +951,7 @@ describe("HitTrack dashboard", () => {
     expect(screen.getByLabelText("Vídeo da luta")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Sobre o ELO pré-luta" })).toHaveLength(2);
     expect(screen.getAllByRole("tooltip")).toHaveLength(2);
-    expect(screen.getAllByRole("tooltip")[0]).toHaveTextContent("Pontuação que representa o nível estimado do robô antes desta luta");
+    expect(screen.getAllByRole("tooltip")[0]).toHaveTextContent("ELO oficial atual da RoboCore");
   });
 
   it("clears every new-fight field and the selected video", () => {
@@ -730,6 +1133,35 @@ describe("HitTrack dashboard", () => {
     expect(calls.find(([path]) => path.endsWith("/video"))[1].body).toBeInstanceOf(FormData);
   });
 
+  it("offers category-ranked robots and fills their official ELO and team", async () => {
+    const ranking = {
+      entries: [
+        { robot_name: "Robo Alpha", team_name: "Team Alpha", elo_score: 1450.25 },
+        { robot_name: "Robo Beta", team_name: "Team Beta", elo_score: 1320.75 },
+      ],
+    };
+    mockApi((path, options) => {
+      if (path === "http://127.0.0.1:8000/api/rankings?category=antweight") {
+        return jsonResponse(ranking);
+      }
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    clickTab("Nova luta");
+    chooseFightCategory();
+
+    fireEvent.click(screen.getByRole("button", { name: "Robô do lado vermelho" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Robo Alpha" }));
+    fireEvent.click(screen.getByRole("button", { name: "Robô do lado verde" }));
+    fireEvent.click(await screen.findByRole("option", { name: "Robo Beta" }));
+
+    expect(screen.getByRole("button", { name: "Equipe do lado vermelho" })).toHaveTextContent("Team Alpha");
+    expect(screen.getByRole("button", { name: "Equipe do lado verde" })).toHaveTextContent("Team Beta");
+    const eloInputs = document.querySelectorAll(".new-fight-form input[type='number'][step='any']");
+    expect(eloInputs[0]).toHaveValue(1450.25);
+    expect(eloInputs[1]).toHaveValue(1320.75);
+  });
+
   it("blocks fight creation when the API health check is offline", async () => {
     const calls = [];
     vi.spyOn(console, "error").mockImplementation(() => {});
@@ -747,9 +1179,9 @@ describe("HitTrack dashboard", () => {
     fireEvent.submit(container.querySelector(".new-fight-form"));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "API offline. Reconecte a API antes de criar uma luta.",
+      "Não foi possível criar a luta: a API está offline. Verifique a conexão e tente novamente.",
     );
-    expect(screen.getByRole("button", { name: "Criar luta e iniciar análise" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Criar luta e iniciar análise" })).toBeEnabled();
     expect(calls.some(([path, options]) => path === "http://127.0.0.1:8000/api/fights" && options.method === "POST")).toBe(false);
   });
 
@@ -903,6 +1335,54 @@ describe("HitTrack dashboard", () => {
     );
   });
 
+  it("simulates Elo changes and estimated positions after recording a winner", async () => {
+    let winnerRobot = null;
+    const ratedFight = {
+      ...fight,
+      elo_red: 1000,
+      elo_green: 1010,
+      status: "encerrada",
+    };
+    const ranking = {
+      entries: [
+        { robot_name: "Robo Alfa", elo_score: 1000 },
+        { robot_name: "Robo Beta", elo_score: 1010 },
+        { robot_name: "Robo Gamma", elo_score: 1005 },
+      ],
+    };
+    mockApi((path, options = {}) => {
+      if (path === "http://127.0.0.1:8000/api/fights/1") {
+        return jsonResponse({ ...ratedFight, winner_robot: winnerRobot });
+      }
+      if (path === "http://127.0.0.1:8000/api/fights/1/result") {
+        winnerRobot = JSON.parse(options.body).winner_robot;
+        return jsonResponse({
+          ...ratedFight,
+          winner_robot: winnerRobot,
+          status_note: "Vencedor informado manualmente.",
+        });
+      }
+      if (path === "http://127.0.0.1:8000/api/rankings?category=antweight") {
+        return jsonResponse(ranking);
+      }
+      return defaultApiResponse(path, options);
+    });
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: /Ver última análise/ }));
+    fireEvent.click(await screen.findByRole("button", { name: "Avaliar: Robo Alfa venceu" }));
+
+    expect(await screen.findByText("Variação estimada de ELO")).toBeInTheDocument();
+    expect(screen.getByLabelText("Variação de ELO de Robo Alfa")).toHaveTextContent("+17.84 pontos");
+    expect(screen.getByLabelText("Variação de ELO de Robo Beta")).toHaveTextContent("-17.84 pontos");
+    await waitFor(() => expect(screen.getByLabelText("Variação de ELO de Robo Alfa")).toHaveTextContent(
+      "Posição estimada: 3º → 1º · Subiu 2 posições",
+    ));
+    expect(screen.getByLabelText("Variação de ELO de Robo Beta")).toHaveTextContent(
+      "Posição estimada: 1º → 3º · Desceu 2 posições",
+    );
+    expect(screen.getByText(/Não altera o ranking oficial/)).toBeInTheDocument();
+  });
+
   it("shows an offline notice when stopping a fight fails", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockApi((path, options) => {
@@ -939,6 +1419,23 @@ describe("HitTrack dashboard", () => {
     });
 
     expect(document.querySelector("video")).toHaveAttribute(
+      "src",
+      "http://127.0.0.1:8000/api/fights/1/video",
+    );
+  });
+
+  it("displays a completed fight video when the analysis status has no frame", async () => {
+    mockApi((path) => {
+      if (path === "http://127.0.0.1:8000/api/fights/1") {
+        return jsonResponse({ ...fight, video_filename: "fight.mp4" });
+      }
+      return defaultApiResponse(path);
+    });
+    render(<App />);
+    clickTab("Análise");
+
+    expect(await screen.findByText("fight.mp4")).toBeInTheDocument();
+    expect(document.querySelector(".fight-video")).toHaveAttribute(
       "src",
       "http://127.0.0.1:8000/api/fights/1/video",
     );
