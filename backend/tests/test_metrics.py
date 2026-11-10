@@ -24,4 +24,6 @@ def test_calculate_metrics_groups_aliases_and_thirds():
     assert result.robots[0].hits == 2
     assert result.robots[0].hits_per_minute == 1.0
     assert result.robots[0].third_distribution == [1, 1, 0]
+    assert result.robots[0].hit_timeline == [1, 0, 0, 1, 0, 0, 0, 0, 0, 0]
     assert result.robots[1].third_distribution == [0, 0, 1]
+    assert result.robots[1].hit_timeline == [0, 0, 0, 0, 0, 0, 1, 0, 0, 0]

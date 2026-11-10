@@ -1,0 +1,20 @@
+flowchart LR
+  analyst["Analista/equipe"]
+  create["UC-01<br/>Registrar luta e<br/>importar hits"]
+  analyze["UC-02<br/>Analisar vídeo e<br/>calcular métricas"]
+  dashboard["UC-03<br/>Consultar dashboard<br/>e histórico"]
+  ranking["UC-04<br/>Consultar ranking"]
+  monitor["UC-05<br/>Monitorar API"]
+  detector["Detector externo<br/>hitcount-ia"]
+  robocore["Fonte de ranking<br/>RoboCore"]
+  prometheus["Prometheus<br/>coleta /metrics"]
+  grafana["Grafana<br/>exibe indicadores"]
+  analyst -->|"cadastra"| create
+  analyst -->|"inicia"| analyze
+  analyst -->|"consulta"| dashboard
+  analyst -->|"seleciona categoria"| ranking
+  analyst -->|"acompanha"| monitor
+  detector -->|"eventos de vídeo"| analyze
+  robocore -->|"dados publicados"| ranking
+  prometheus -->|"scrape /metrics"| monitor
+  grafana -->|"consulta"| prometheus

@@ -1,0 +1,14 @@
+flowchart TB
+  start["Analista inicia cadastro"]
+  form["Informa competição, categoria,<br/>robôs, equipes, duração e FPS"]
+  validate["API valida os dados<br/>e salva a luta"]
+  input["Envia vídeo ou eventos JSON"]
+  stored["Valida tipo/robôs, remove duplicatas<br/>e associa dados à luta"]
+  error["Retorna erro de validação<br/>sem aceitar o payload"]
+  done["Luta e dados disponíveis<br/>para consulta"]
+  start --> form
+  form --> validate
+  validate -->|"dados válidos"| input
+  validate -->|"inválidos"| error
+  input --> stored
+  stored --> done

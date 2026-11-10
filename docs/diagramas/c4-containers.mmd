@@ -1,0 +1,16 @@
+flowchart LR
+  analyst["Analista<br/>navegador"]
+  frontend["Frontend<br/>React + Vite"]
+  api["API<br/>FastAPI + Python"]
+  db["Banco de dados<br/>PostgreSQL"]
+  storage["Vídeos<br/>sistema de arquivos local"]
+  detector["Detector<br/>hitcount-ia externo"]
+  ranking["Ranking<br/>RoboCore externo"]
+  monitor["Prometheus + Grafana<br/>observabilidade local"]
+  analyst -->|"navegador"| frontend
+  frontend -->|"HTTP/JSON"| api
+  api -->|"SQLAlchemy"| db
+  api -->|"arquivos"| storage
+  api -->|"worker/pesos"| detector
+  ranking -->|"HTTP"| api
+  monitor -->|"scrape /metrics"| api

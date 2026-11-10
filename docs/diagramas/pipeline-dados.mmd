@@ -1,0 +1,18 @@
+flowchart LR
+  video["Vídeo da luta"]
+  json["Hits JSON<br/>importação manual"]
+  detector["hitcount-ia<br/>hits detectados"]
+  validate["API<br/>validação e aliases"]
+  db["PostgreSQL<br/>Fight + HitEvent"]
+  metrics["Serviços<br/>métricas por luta/agregadas"]
+  dashboard["Frontend<br/>gráficos, histórico<br/>e sugestões limitadas"]
+  rank["RoboCore<br/>ranking por categoria"]
+  snapshot["Snapshot de ranking<br/>separado dos hits"]
+  video -->|"entrada"| detector
+  detector -->|"eventos"| validate
+  json -->|"eventos"| validate
+  validate -->|"eventos validados"| db
+  db -->|"dados persistidos"| metrics
+  metrics -->|"respostas REST"| dashboard
+  rank -->|"consulta externa"| snapshot
+  snapshot -->|"ELO oficial importado"| dashboard
