@@ -58,6 +58,15 @@ const emptyMetrics = {
   robots: [],
 };
 
+function isValidFightId(value) {
+  return Number.isSafeInteger(value) && value > 0;
+}
+
+function getStoredFightId() {
+  const storedFightId = Number(localStorage.getItem("hittrack-fight-id"));
+  return isValidFightId(storedFightId) ? storedFightId : DEFAULT_FIGHT_ID;
+}
+
 function formatDuration(seconds) {
   const minutes = Math.floor(seconds / 60);
   const rest = Math.round(seconds % 60);
@@ -1432,7 +1441,7 @@ function AggregateAnalytics({
 
 export default function App() {
   const [view, setView] = useState("home");
-  const [fightId, setFightId] = useState(() => Number(localStorage.getItem("hittrack-fight-id")) || DEFAULT_FIGHT_ID);
+  const [fightId, setFightId] = useState(getStoredFightId);
   const [fight, setFight] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
   const [form, setForm] = useState(EMPTY_FIGHT_FORM);
@@ -1740,8 +1749,13 @@ export default function App() {
     try {
       const response = await fetch(`${API_URL}/api/fights`);
       if (!response.ok) throw new Error("Histórico indisponível");
-      setFights(await response.json());
-      setHistoryPage(1);
+      const history = await response.json();
+      if (!Array.isArray(history)) throw new Error("Formato de histórico inválido");
+      setFights(history.filter(
+        (historicalFight) => historicalFight
+          && typeof historicalFight === "object"
+          && isValidFightId(historicalFight.id),
+      ));
       setOffline(false);
     } catch {
       setOffline(true);
@@ -1772,9 +1786,11 @@ export default function App() {
   }, [analyticsFilters]);
 
   useEffect(() => {
-    loadData();
-    loadHistory();
-    const metricsInterval = setInterval(loadData, 5000);
+    void loadData();
+    void loadHistory();
+    const metricsInterval = setInterval(() => {
+      void loadData();
+    }, 5000);
     const liveInterval = setInterval(async () => {
       try {
         const response = await fetch(`${API_URL}/hits`);
@@ -1888,8 +1904,12 @@ export default function App() {
   }
 
   function openFight(selectedFightId) {
+    if (!isValidFightId(selectedFightId)) {
+      console.error(new Error("ID de luta inválido"));
+      return;
+    }
     setFightId(selectedFightId);
-    localStorage.setItem("hittrack-fight-id", String(selectedFightId));
+    localStorage.setItem("hittrack-fight-id", String(Number(selectedFightId)));
     setView("overview");
   }
 
@@ -1951,6 +1971,7 @@ export default function App() {
       });
       if (!fightResponse.ok) throw new Error("Não foi possível criar a luta");
       const fight = await fightResponse.json();
+      if (!isValidFightId(fight?.id)) throw new Error("ID de luta inválido");
       const upload = new FormData();
       upload.append("file", videoFile);
       const uploadResponse = await fetch(`${API_URL}/api/fights/${fight.id}/video`, { method: "POST", body: upload });
@@ -2134,10 +2155,7 @@ export default function App() {
           <button className={view === "home" ? "active" : ""} onClick={() => setView("home")}><Home size={16} /> Home</button>
           <button className={view === "overview" ? "active" : ""} onClick={() => setView("overview")}><Activity size={16} /> Análise</button>
           <button className={view === "live" ? "active" : ""} onClick={() => setView("live")}><Radio size={16} /> Ao vivo</button>
-          <button className={view === "history" ? "active" : ""} onClick={() => { setView("history"); loadHistory(); }}><History size={16} /> Histórico</button>
-          <button className={view === "analytics" ? "active" : ""} onClick={() => setView("analytics")}><ChartNoAxesCombined size={16} /> Desempenho</button>
-          <button className={view === "ranking" ? "active" : ""} onClick={() => setView("ranking")}><Trophy size={16} /> Ranking</button>
-          <button className={view === "new-fight" ? "active" : ""} onClick={() => setView("new-fight")}><Upload size={16} /> Nova luta</button>
+          <button className={view === "history" ? "active" : ""} onClick={() => { setView("history"); void loadHistory(); }}><History size={16} /> Histórico</button>
         </nav>
 
         {offline && <div className="notice"><CircleAlert size={17} /> API offline. Exibindo a última leitura disponível.</div>}

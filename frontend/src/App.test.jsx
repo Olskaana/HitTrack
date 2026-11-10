@@ -1011,6 +1011,37 @@ describe("HitTrack dashboard", () => {
     expect(localStorage.getItem("hittrack-fight-id")).toBe("2");
   });
 
+  it("ignores history entries with invalid fight ids", async () => {
+    mockApi((path, options) => {
+      if (path === "http://127.0.0.1:8000/api/fights") {
+        return jsonResponse([{ ...fights[0], id: "<script>alert(1)</script>" }, fights[1]]);
+      }
+      return defaultApiResponse(path, options);
+    });
+
+    render(<App />);
+    clickTab("Histórico");
+
+    expect(await screen.findByText("1 de 1 lutas")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Robo Alfa/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Robo Gamma/ })).toBeInTheDocument();
+  });
+
+  it("falls back to the default fight when stored id is invalid", async () => {
+    localStorage.setItem("hittrack-fight-id", "1e309");
+    const requestedPaths = [];
+    mockApi((path, options) => {
+      requestedPaths.push(path);
+      return defaultApiResponse(path, options);
+    });
+
+    render(<App />);
+
+    expect(await screen.findByText("hits analisados")).toBeInTheDocument();
+    expect(requestedPaths).toContain("http://127.0.0.1:8000/api/fights/1");
+    await waitFor(() => expect(localStorage.getItem("hittrack-fight-id")).toBe("1"));
+  });
+
   it("clears the stored fight id when the selected fight no longer exists", async () => {
     localStorage.setItem("hittrack-fight-id", "1");
     mockApi((path) => {
