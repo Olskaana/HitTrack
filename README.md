@@ -146,7 +146,7 @@ O diferencial proposto é organizar eventos de combate de robôs, não dados esp
 
 ## 6. Vídeo da aplicação
 
-> **Vídeo pendente:** adicionar gravação de demonstração e substituir este aviso pelo link. A gravação deve percorrer cadastro/ingestão, análise da luta e consulta do histórico ou desempenho, sem exibir credenciais ou dados que não devam ser publicados.
+[![Assistir à demonstração do HitTrack no YouTube](https://img.youtube.com/vi/_7RctnmemRE/maxresdefault.jpg)](https://youtu.be/_7RctnmemRE)
 
 <a id="07-requisitos-funcionais-e-nao-funcionais"></a>
 
