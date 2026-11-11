@@ -2156,6 +2156,9 @@ export default function App() {
           <button className={view === "overview" ? "active" : ""} onClick={() => setView("overview")}><Activity size={16} /> Análise</button>
           <button className={view === "live" ? "active" : ""} onClick={() => setView("live")}><Radio size={16} /> Ao vivo</button>
           <button className={view === "history" ? "active" : ""} onClick={() => { setView("history"); void loadHistory(); }}><History size={16} /> Histórico</button>
+          <button className={view === "analytics" ? "active" : ""} onClick={() => setView("analytics")}><ChartNoAxesCombined size={16} /> Desempenho</button>
+          <button className={view === "ranking" ? "active" : ""} onClick={() => setView("ranking")}><Trophy size={16} /> Ranking</button>
+          <button className={view === "new-fight" ? "active" : ""} onClick={() => setView("new-fight")}><Upload size={16} /> Nova luta</button>
         </nav>
 
         {offline && <div className="notice"><CircleAlert size={17} /> API offline. Exibindo a última leitura disponível.</div>}
