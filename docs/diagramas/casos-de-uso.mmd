@@ -5,6 +5,13 @@ flowchart LR
   dashboard["UC-03<br/>Consultar dashboard<br/>e histórico"]
   ranking["UC-04<br/>Consultar ranking"]
   monitor["UC-05<br/>Monitorar API"]
+  subgraph sistema["Sistema HitTrack"]
+    create
+    analyze
+    dashboard
+    ranking
+    monitor
+  end
   detector["Detector externo<br/>hitcount-ia"]
   robocore["Fonte de ranking<br/>RoboCore"]
   prometheus["Prometheus<br/>coleta /metrics"]

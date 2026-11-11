@@ -1,56 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 1010" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="940" viewBox="0 0 1220 940" role="img" aria-labelledby="title desc">
 <title id="title">HitTrack | Casos de uso</title>
-<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<desc id="desc">Ator Analista/equipe ligado aos cinco casos de uso; sistemas externos alimentam análise, ranking e monitoramento.</desc>
+<defs><marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M 0 0.5 L 12 6 L 0 11.5 z" fill="#667b86"/></marker><marker id="er-one" viewBox="0 0 20 20" refX="0" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 8 2 V 18 M 13 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker><marker id="er-many" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 4 10 L 20 2 M 4 10 L 20 18 M 4 10 H 20 M 3 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker></defs>
 <rect width="100%" height="100%" fill="#ffffff"/>
-<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">HitTrack | Casos de uso</text>
-<path d="M 265 370 L 375 140" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="320" y="248" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">cadastra</text>
-<path d="M 265 370 L 375 290" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="320" y="323" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">inicia</text>
-<path d="M 265 370 L 375 440" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="320" y="398" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">consulta</text>
-<path d="M 265 370 L 375 590" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="320" y="473" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">seleciona categoria</text>
-<path d="M 140 420 L 500 690" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="320" y="548" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">acompanha</text>
-<path d="M 855 200 L 625 290" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="740" y="238" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">eventos de vídeo</text>
-<path d="M 855 440 L 625 590" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="740" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">dados publicados</text>
-<path d="M 855 740 L 625 740" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="740" y="733" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">scrape /metrics</text>
-<path d="M 980 830 L 980 790" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<rect x="15" y="320" width="250" height="100" rx="14" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="140" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Analista/equipe</text>
-<ellipse cx="500" cy="140" rx="125.0" ry="50.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="500" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-01</text>
-<text x="500" y="141" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Registrar luta e</text>
-<text x="500" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">importar hits</text>
-<ellipse cx="500" cy="290" rx="125.0" ry="50.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="500" y="272" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-02</text>
-<text x="500" y="291" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Analisar vídeo e</text>
-<text x="500" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">calcular métricas</text>
-<ellipse cx="500" cy="440" rx="125.0" ry="50.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="500" y="422" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-03</text>
-<text x="500" y="441" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Consultar dashboard</text>
-<text x="500" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">e histórico</text>
-<ellipse cx="500" cy="590" rx="125.0" ry="50.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="500" y="581" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-04</text>
-<text x="500" y="600" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Consultar ranking</text>
-<ellipse cx="500" cy="740" rx="125.0" ry="50.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
-<text x="500" y="731" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-05</text>
-<text x="500" y="750" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Monitorar API</text>
-<rect x="855" y="150" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="980" y="191" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Detector externo</text>
-<text x="980" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">hitcount-ia</text>
-<rect x="855" y="390" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="980" y="431" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Fonte de ranking</text>
-<text x="980" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">RoboCore</text>
-<rect x="855" y="690" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="980" y="731" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Prometheus</text>
-<text x="980" y="750" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">coleta /metrics</text>
-<rect x="855" y="830" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="980" y="871" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Grafana</text>
-<text x="980" y="890" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">exibe indicadores</text>
+<text x="40" y="48" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172b3a">HitTrack | Casos de uso</text>
+<rect x="410" y="90" width="400" height="680" rx="18" fill="#fafcfe" stroke="#9aaab4" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="428" y="754" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6b7f8a">Sistema HitTrack</text>
+<path d="M 250 150 L 480 150" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 280 L 480 280" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 410 L 480 410" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 540 L 480 540" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 670 L 480 670" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 930 280 L 740 280" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 930 540 L 740 540" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 930 670 L 740 670" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1050 810 L 1050 710" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<ellipse cx="610.0" cy="150.0" rx="130.0" ry="45.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="610.0" y="135.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-01</text>
+<text x="610.0" y="154.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Registrar luta e</text>
+<text x="610.0" y="173.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">importar hits</text>
+<ellipse cx="610.0" cy="280.0" rx="130.0" ry="45.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="610.0" y="265.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-02</text>
+<text x="610.0" y="284.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Analisar vídeo e</text>
+<text x="610.0" y="303.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">calcular métricas</text>
+<ellipse cx="610.0" cy="410.0" rx="130.0" ry="45.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="610.0" y="395.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-03</text>
+<text x="610.0" y="414.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Consultar dashboard</text>
+<text x="610.0" y="433.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">e histórico</text>
+<ellipse cx="610.0" cy="540.0" rx="130.0" ry="45.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="610.0" y="535.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-04</text>
+<text x="610.0" y="554.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Consultar ranking</text>
+<ellipse cx="610.0" cy="670.0" rx="130.0" ry="45.0" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<text x="610.0" y="665.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">UC-05</text>
+<text x="610.0" y="684.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Monitorar API</text>
+<rect x="50" y="105" width="200" height="610" rx="14" fill="#f0f7ff" stroke="#3776ab" stroke-width="2"/>
+<g fill="none" stroke="#3776ab" stroke-width="2" stroke-linecap="round"><circle cx="150" cy="355" r="10"/><path d="M 150 365 V 391 M 132 375 H 168 M 150 391 L 136 411 M 150 391 L 164 411"/></g>
+<text x="150" y="440" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#243b49">Analista/equipe</text>
+<rect x="930" y="240" width="240" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="1050.0" y="275.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Detector externo</text>
+<text x="1050.0" y="294.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">hitcount-ia</text>
+<rect x="930" y="500" width="240" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="1050.0" y="535.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Fonte de ranking</text>
+<text x="1050.0" y="554.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">RoboCore</text>
+<rect x="930" y="630" width="240" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="1050.0" y="665.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Prometheus</text>
+<text x="1050.0" y="684.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">coleta /metrics</text>
+<rect x="930" y="810" width="240" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="1050.0" y="845.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Grafana</text>
+<text x="1050.0" y="864.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">exibe indicadores</text>
+<text x="345" y="154" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">cadastra</text>
+<text x="345" y="284" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">inicia</text>
+<text x="345" y="414" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">consulta</text>
+<text x="345" y="544" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">seleciona categoria</text>
+<text x="345" y="674" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">acompanha</text>
+<text x="870" y="284" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">eventos de vídeo</text>
+<text x="870" y="544" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">dados publicados</text>
+<text x="870" y="674" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">scrape /metrics</text>
+<text x="1050.0" y="764.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">consulta</text>
 </svg>

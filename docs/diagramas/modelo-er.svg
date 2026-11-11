@@ -1,34 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 800" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="840" viewBox="0 0 1100 840" role="img" aria-labelledby="title desc">
 <title id="title">Persistência | Modelo entidade-relacionamento</title>
-<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<desc id="desc">Tabelas fights, hit_events, ranking_snapshots e ranking_entries com suas chaves e relações 1:N.</desc>
+<defs><marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M 0 0.5 L 12 6 L 0 11.5 z" fill="#667b86"/></marker><marker id="er-one" viewBox="0 0 20 20" refX="0" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 8 2 V 18 M 13 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker><marker id="er-many" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 4 10 L 20 2 M 4 10 L 20 18 M 4 10 H 20 M 3 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker></defs>
 <rect width="100%" height="100%" fill="#ffffff"/>
-<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">Persistência | Modelo entidade-relacionamento</text>
-<path d="M 425 300 L 635 300" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="530" y="293" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">1 : N</text>
-<path d="M 425 600 L 635 600" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="530" y="593" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">1 : N</text>
-<rect x="175" y="250" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
-<text x="300" y="264" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">FIGHT</text>
-<text x="300" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
-<text x="300" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">competition, fought_at</text>
-<text x="300" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">robot_red, robot_green</text>
-<text x="300" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">status, result, ELOs</text>
-<rect x="635" y="250" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
-<text x="760" y="264" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">HIT_EVENT</text>
-<text x="760" y="283" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
-<text x="760" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">FK fight_id</text>
-<text x="760" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">frame, robot</text>
-<text x="760" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">source_robot</text>
-<rect x="175" y="550" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
-<text x="300" y="573" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RANKING_SNAPSHOT</text>
-<text x="300" y="592" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
-<text x="300" y="611" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">category, source_url</text>
-<text x="300" y="630" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">imported_at</text>
-<rect x="635" y="550" width="250" height="100" rx="14" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
-<text x="760" y="564" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RANKING_ENTRY</text>
-<text x="760" y="583" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PK id</text>
-<text x="760" y="602" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">FK snapshot_id</text>
-<text x="760" y="621" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">rank, ELO, robot/team</text>
-<text x="760" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">record, URL</text>
+<text x="40" y="48" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172b3a">Persistência | Modelo entidade-relacionamento</text>
+<path d="M 400 174 L 700 174" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#er-many)" marker-start="url(#er-one)"/>
+<path d="M 400 554 L 700 554" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#er-many)" marker-start="url(#er-one)"/>
+<rect x="60" y="116" width="340" height="310" rx="10" fill="#ffffff" stroke="#4971a7" stroke-width="2"/>
+<path d="M 60 156 V 126 Q 60 116 70 116 H 390 Q 400 116 400 126 V 156 Z" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="230.0" y="142" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#243b49">fights</text>
+<text x="74" y="178.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#b2541a">PK</text>
+<text x="106" y="178.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">id</text>
+<text x="386" y="178.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="106" y="204.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">competition, category</text>
+<text x="386" y="204.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="230.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">fought_at, created_at</text>
+<text x="386" y="230.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">datetime</text>
+<text x="106" y="256.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">robot_red, robot_green</text>
+<text x="386" y="256.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="282.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">team_red, team_green</text>
+<text x="386" y="282.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="308.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">status, result, winner_robot</text>
+<text x="386" y="308.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="334.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">duration_seconds, fps</text>
+<text x="386" y="334.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">float</text>
+<text x="106" y="360.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">elo_red, elo_green</text>
+<text x="386" y="360.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">float</text>
+<text x="106" y="386.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">video_source, video_filename</text>
+<text x="386" y="386.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">text</text>
+<text x="106" y="412.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">robot_aliases, is_test</text>
+<text x="386" y="412.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">json / bool</text>
+<rect x="700" y="90" width="340" height="180" rx="10" fill="#ffffff" stroke="#4971a7" stroke-width="2"/>
+<path d="M 700 130 V 100 Q 700 90 710 90 H 1030 Q 1040 90 1040 100 V 130 Z" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="870.0" y="116" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#243b49">hit_events</text>
+<text x="714" y="152.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#b2541a">PK</text>
+<text x="746" y="152.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">id</text>
+<text x="1026" y="152.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="714" y="178.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#3973a8">FK</text>
+<text x="746" y="178.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">fight_id</text>
+<text x="1026" y="178.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="746" y="204.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">frame</text>
+<text x="1026" y="204.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="746" y="230.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">robot</text>
+<text x="1026" y="230.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="746" y="256.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">source_robot</text>
+<text x="1026" y="256.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<rect x="60" y="496" width="340" height="154" rx="10" fill="#ffffff" stroke="#4971a7" stroke-width="2"/>
+<path d="M 60 536 V 506 Q 60 496 70 496 H 390 Q 400 496 400 506 V 536 Z" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="230.0" y="522" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#243b49">ranking_snapshots</text>
+<text x="74" y="558.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#b2541a">PK</text>
+<text x="106" y="558.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">id</text>
+<text x="386" y="558.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="106" y="584.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">category</text>
+<text x="386" y="584.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="610.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">source_url</text>
+<text x="386" y="610.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="106" y="636.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">imported_at</text>
+<text x="386" y="636.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">datetime</text>
+<rect x="700" y="470" width="340" height="232" rx="10" fill="#ffffff" stroke="#4971a7" stroke-width="2"/>
+<path d="M 700 510 V 480 Q 700 470 710 470 H 1030 Q 1040 470 1040 480 V 510 Z" fill="#edf4ff" stroke="#4971a7" stroke-width="2"/>
+<text x="870.0" y="496" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#243b49">ranking_entries</text>
+<text x="714" y="532.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#b2541a">PK</text>
+<text x="746" y="532.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">id</text>
+<text x="1026" y="532.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="714" y="558.5" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" fill="#3973a8">FK</text>
+<text x="746" y="558.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#243b49">snapshot_id</text>
+<text x="1026" y="558.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="746" y="584.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">rank_position, elo_score</text>
+<text x="1026" y="584.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">int / float</text>
+<text x="746" y="610.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">robot_name, team_name</text>
+<text x="1026" y="610.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string</text>
+<text x="746" y="636.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">total_fights, wins, losses</text>
+<text x="1026" y="636.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">integer</text>
+<text x="746" y="662.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">latest_fight_at</text>
+<text x="1026" y="662.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">datetime</text>
+<text x="746" y="688.5" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#243b49">robot_url, robot_source_id</text>
+<text x="1026" y="688.5" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#7a8c96">string / int</text>
+<text x="60" y="800" text-anchor="start" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#6b7f8a">Legenda: ‖ exatamente um  ·  pé de galinha: um ou muitos  ·  PK chave primária  ·  FK chave estrangeira  ·  filhos excluídos em cascata</text>
+<text x="550" y="162.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">1 : N  (hits)</text>
+<text x="550" y="542.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">1 : N  (entries)</text>
 </svg>

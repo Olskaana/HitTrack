@@ -1,50 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 850" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="880" viewBox="0 0 1080 880" role="img" aria-labelledby="title desc">
 <title id="title">C4 | Componentes da API</title>
-<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<desc id="desc">Rotas, serviços e persistência da API FastAPI e suas integrações.</desc>
+<defs><marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M 0 0.5 L 12 6 L 0 11.5 z" fill="#667b86"/></marker><marker id="er-one" viewBox="0 0 20 20" refX="0" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 8 2 V 18 M 13 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker><marker id="er-many" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 4 10 L 20 2 M 4 10 L 20 18 M 4 10 H 20 M 3 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker></defs>
 <rect width="100%" height="100%" fill="#ffffff"/>
-<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">C4 | Componentes da API</text>
-<path d="M 245 370 L 265 170" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="255" y="263" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">REST</text>
-<path d="M 245 370 L 265 370" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 245 370 L 265 570" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="255" y="463" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">REST</text>
-<path d="M 515 170 L 575 170" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 515 170 L 875 370" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="695" y="263" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">consulta/persiste</text>
-<path d="M 515 370 L 875 370" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="695" y="363" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">lê dados</text>
-<path d="M 515 570 L 875 370" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="695" y="463" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">grava snapshot</text>
-<path d="M 700 520 L 390 220" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="545" y="363" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">eventos</text>
-<path d="M 575 720 L 515 570" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="545" y="638" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">HTTP</text>
-<rect x="-5" y="320" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="120" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Frontend</text>
-<text x="120" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">React + Vite</text>
-<rect x="265" y="120" width="250" height="100" rx="14" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
-<text x="390" y="161" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas de lutas</text>
-<text x="390" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">cadastro, vídeo e hits</text>
-<rect x="265" y="320" width="250" height="100" rx="14" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
-<text x="390" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas/serviço analítico</text>
-<text x="390" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">filtros e agregações</text>
-<rect x="265" y="520" width="250" height="100" rx="14" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
-<text x="390" y="561" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas/importador ranking</text>
-<text x="390" y="580" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">snapshot RoboCore</text>
-<rect x="575" y="120" width="250" height="100" rx="14" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
-<text x="700" y="161" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Serviço de métricas</text>
-<text x="700" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">hits e linha do tempo</text>
-<rect x="875" y="320" width="250" height="100" rx="14" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
-<text x="1000" y="361" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">SQLAlchemy + modelos</text>
-<text x="1000" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">PostgreSQL</text>
-<rect x="575" y="520" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="700" y="561" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Detector externo</text>
-<text x="700" y="580" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">hitcount-ia</text>
-<rect x="575" y="670" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="700" y="711" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RoboCore</text>
-<text x="700" y="730" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">fonte do ranking</text>
-<rect x="875" y="550" width="250" height="100" rx="14" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
-<text x="1000" y="591" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Instrumentação HTTP</text>
-<text x="1000" y="610" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">exposição /metrics</text>
+<text x="40" y="48" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172b3a">C4 | Componentes da API</text>
+<rect x="340" y="215" width="700" height="495" rx="18" fill="#fafcfe" stroke="#9aaab4" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="358" y="694" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#6b7f8a">API FastAPI</text>
+<path d="M 240 405 L 288 405 Q 300 405 300 393 L 300 307 Q 300 295 312 295 L 380 295" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 240 455 L 380 455" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 240 505 L 288 505 Q 300 505 300 517 L 300 603 Q 300 615 312 615 L 380 615" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 500 170 L 500 250" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 500 760 L 500 660" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 620 280 L 760 280" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 620 320 L 668 320 Q 680 320 680 332 L 680 403 Q 680 415 692 415 L 760 415" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 620 455 L 760 455" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 620 615 L 668 615 Q 680 615 680 603 L 680 507 Q 680 495 692 495 L 760 495" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="40" y="375" width="200" height="160" rx="12" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
+<text x="140.0" y="450.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Frontend</text>
+<text x="140.0" y="469.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">React + Vite</text>
+<rect x="380" y="80" width="240" height="90" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="500.0" y="120.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Detector externo</text>
+<text x="500.0" y="139.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">hitcount-ia</text>
+<rect x="380" y="250" width="240" height="90" rx="12" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
+<text x="500.0" y="290.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas de lutas</text>
+<text x="500.0" y="309.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">cadastro, vídeo e hits</text>
+<rect x="380" y="410" width="240" height="90" rx="12" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
+<text x="500.0" y="450.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas/serviço analítico</text>
+<text x="500.0" y="469.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">filtros e agregações</text>
+<rect x="380" y="570" width="240" height="90" rx="12" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
+<text x="500.0" y="610.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Rotas/importador ranking</text>
+<text x="500.0" y="629.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">snapshot RoboCore</text>
+<rect x="380" y="760" width="240" height="90" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="500.0" y="800.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">RoboCore</text>
+<text x="500.0" y="819.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">fonte do ranking</text>
+<rect x="760" y="235" width="240" height="90" rx="12" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
+<text x="880.0" y="275.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Serviço de métricas</text>
+<text x="880.0" y="294.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">hits e linha do tempo</text>
+<rect x="760" y="390" width="240" height="130" rx="12" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
+<text x="880.0" y="450.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">SQLAlchemy + modelos</text>
+<text x="880.0" y="469.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">PostgreSQL</text>
+<rect x="760" y="570" width="240" height="90" rx="12" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
+<text x="880.0" y="610.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Instrumentação HTTP</text>
+<text x="880.0" y="629.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">exposição /metrics</text>
+<text x="340.0" y="299.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">REST</text>
+<text x="320" y="459" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">REST</text>
+<text x="340.0" y="619.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">REST</text>
+<text x="500" y="197" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">eventos</text>
+<text x="500" y="740" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">HTTP</text>
+<text x="690.0" y="284.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">calcula</text>
+<text x="680.0" y="371.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">consulta/persiste</text>
+<text x="700" y="459" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">lê dados</text>
+<text x="680.0" y="559.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">grava snapshot</text>
 </svg>

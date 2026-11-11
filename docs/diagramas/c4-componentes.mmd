@@ -8,6 +8,14 @@ flowchart LR
   detector["Detector externo<br/>hitcount-ia"]
   robo["RoboCore<br/>fonte do ranking"]
   monitor["Instrumentação HTTP<br/>exposição /metrics"]
+  subgraph api["API FastAPI"]
+    fights
+    analytics
+    ranking
+    metrics
+    persistence
+    monitor
+  end
   frontend -->|"REST"| fights
   frontend -->|"REST"| analytics
   frontend -->|"REST"| ranking

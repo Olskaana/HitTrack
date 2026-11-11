@@ -1,47 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 800" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="680" viewBox="0 0 1340 680" role="img" aria-labelledby="title desc">
 <title id="title">HitTrack | Pipeline de dados e fontes</title>
-<desc id="desc">Diagrama com relações entre os componentes do HitTrack.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#667b86"/></marker></defs>
+<desc id="desc">Entradas de hits passam pela API até o banco e o frontend; o ranking RoboCore segue um caminho separado.</desc>
+<defs><marker id="arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M 0 0.5 L 12 6 L 0 11.5 z" fill="#667b86"/></marker><marker id="er-one" viewBox="0 0 20 20" refX="0" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 8 2 V 18 M 13 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker><marker id="er-many" viewBox="0 0 20 20" refX="20" refY="10" markerWidth="20" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto"><path d="M 4 10 L 20 2 M 4 10 L 20 18 M 4 10 H 20 M 3 2 V 18" stroke="#667b86" stroke-width="2" fill="none"/></marker></defs>
 <rect width="100%" height="100%" fill="#ffffff"/>
-<text x="42" y="46" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#172b3a">HitTrack | Pipeline de dados e fontes</text>
-<path d="M 255 200 L 255 200" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 505 200 L 495 330" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="500" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">eventos</text>
-<path d="M 255 390 L 495 330" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="375" y="353" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">eventos</text>
-<path d="M 745 330 L 745 330" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 995 330 L 985 200" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="990" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">dados persistidos</text>
-<path d="M 1110 250 L 1110 400" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="1110" y="318" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">respostas REST</text>
-<path d="M 505 620 L 575 650" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 825 650 L 985 450" fill="none" stroke="#667b86" stroke-width="2" marker-end="url(#arrow)"/>
-<text x="905" y="543" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#445963" paint-order="stroke" stroke="#ffffff" stroke-width="7" stroke-linejoin="round">ELO oficial importado</text>
-<rect x="5" y="150" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="130" y="200" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Vídeo da luta</text>
-<rect x="5" y="340" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="130" y="381" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Hits JSON</text>
-<text x="130" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">importação manual</text>
-<rect x="255" y="150" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="380" y="191" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">hitcount-ia</text>
-<text x="380" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">hits detectados</text>
-<rect x="495" y="280" width="250" height="100" rx="14" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
-<text x="620" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">API</text>
-<text x="620" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">validação e aliases</text>
-<rect x="745" y="280" width="250" height="100" rx="14" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
-<text x="870" y="321" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">PostgreSQL</text>
-<text x="870" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">Fight + HitEvent</text>
-<rect x="985" y="150" width="250" height="100" rx="14" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
-<text x="1110" y="191" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Serviços</text>
-<text x="1110" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">métricas por luta/agregadas</text>
-<rect x="985" y="400" width="250" height="100" rx="14" fill="#eef2ff" stroke="#6376b5" stroke-width="2"/>
-<text x="1110" y="432" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Frontend</text>
-<text x="1110" y="451" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">gráficos, histórico</text>
-<text x="1110" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">e sugestões limitadas</text>
-<rect x="255" y="570" width="250" height="100" rx="14" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
-<text x="380" y="611" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">RoboCore</text>
-<text x="380" y="630" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">ranking por categoria</text>
-<rect x="575" y="600" width="250" height="100" rx="14" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
-<text x="700" y="641" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#243b49">Snapshot de ranking</text>
-<text x="700" y="660" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#243b49">separado dos hits</text>
+<text x="40" y="48" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172b3a">HitTrack | Pipeline de dados e fontes</text>
+<path d="M 250 160 L 380 160" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 490 200 L 490 300" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 340 L 380 340" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 600 340 L 730 340" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 950 340 L 1080 340" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1190 380 L 1190 505" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 250 560 L 380 560" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 600 560 L 1080 560" fill="none" stroke="#667b86" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="40" y="120" width="210" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="145.0" y="164.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Vídeo da luta</text>
+<rect x="40" y="300" width="210" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="145.0" y="335.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Hits JSON</text>
+<text x="145.0" y="354.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">importação manual</text>
+<rect x="380" y="120" width="220" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="490.0" y="155.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">hitcount-ia</text>
+<text x="490.0" y="174.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">hits detectados</text>
+<rect x="380" y="300" width="220" height="80" rx="12" fill="#eaf3fb" stroke="#3973a8" stroke-width="2"/>
+<text x="490.0" y="335.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">API</text>
+<text x="490.0" y="354.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">validação e aliases</text>
+<rect x="730" y="300" width="220" height="80" rx="12" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
+<text x="840.0" y="335.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">PostgreSQL</text>
+<text x="840.0" y="354.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">Fight + HitEvent</text>
+<rect x="1080" y="300" width="220" height="80" rx="12" fill="#f2efff" stroke="#7761b1" stroke-width="2"/>
+<text x="1190.0" y="335.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Serviços</text>
+<text x="1190.0" y="354.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">métricas por luta/agregadas</text>
+<rect x="40" y="520" width="210" height="80" rx="12" fill="#fff7e8" stroke="#c78624" stroke-width="2"/>
+<text x="145.0" y="555.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">RoboCore</text>
+<text x="145.0" y="574.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">ranking por categoria</text>
+<rect x="380" y="520" width="220" height="80" rx="12" fill="#eaf6ef" stroke="#45845f" stroke-width="2"/>
+<text x="490.0" y="555.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Snapshot de ranking</text>
+<text x="490.0" y="574.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">separado dos hits</text>
+<rect x="1080" y="505" width="220" height="110" rx="12" fill="#eef2ff" stroke="#6376b5" stroke-width="2"/>
+<text x="1190.0" y="545.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#243b49">Frontend</text>
+<text x="1190.0" y="564.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">gráficos, histórico</text>
+<text x="1190.0" y="583.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="400" fill="#243b49">e sugestões limitadas</text>
+<text x="315.0" y="164.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">entrada</text>
+<text x="490.0" y="254.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">eventos</text>
+<text x="315.0" y="344.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">eventos</text>
+<text x="665.0" y="344.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">eventos validados</text>
+<text x="1015.0" y="344.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">dados persistidos</text>
+<text x="1190.0" y="446.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">respostas REST</text>
+<text x="315.0" y="564.0" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">consulta externa</text>
+<text x="840" y="564" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12.5" fill="#3d525d" paint-order="stroke" stroke="#ffffff" stroke-width="8" stroke-linejoin="round">ELO oficial importado</text>
 </svg>

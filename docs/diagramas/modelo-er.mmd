@@ -1,7 +1,52 @@
-flowchart LR
-  fight["FIGHT<br/>PK id<br/>competition, fought_at<br/>robot_red, robot_green<br/>status, result, ELOs"]
-  hit["HIT_EVENT<br/>PK id<br/>FK fight_id<br/>frame, robot<br/>source_robot"]
-  snapshot["RANKING_SNAPSHOT<br/>PK id<br/>category, source_url<br/>imported_at"]
-  entry["RANKING_ENTRY<br/>PK id<br/>FK snapshot_id<br/>rank, ELO, robot/team<br/>record, URL"]
-  fight -->|"1 : N"| hit
-  snapshot -->|"1 : N"| entry
+erDiagram
+  FIGHTS ||--|{ HIT_EVENTS : "hits"
+  RANKING_SNAPSHOTS ||--|{ RANKING_ENTRIES : "entries"
+  FIGHTS {
+    integer id PK
+    string competition
+    string category
+    datetime fought_at
+    datetime created_at
+    string robot_red
+    string robot_green
+    string team_red
+    string team_green
+    string status
+    string result
+    string winner_robot
+    float duration_seconds
+    float fps
+    float elo_red
+    float elo_green
+    text video_source
+    string video_filename
+    json robot_aliases
+    boolean is_test
+  }
+  HIT_EVENTS {
+    integer id PK
+    integer fight_id FK
+    integer frame
+    string robot
+    string source_robot
+  }
+  RANKING_SNAPSHOTS {
+    integer id PK
+    string category
+    string source_url
+    datetime imported_at
+  }
+  RANKING_ENTRIES {
+    integer id PK
+    integer snapshot_id FK
+    integer rank_position
+    float elo_score
+    string robot_name
+    string team_name
+    integer robot_source_id
+    integer total_fights
+    integer wins
+    integer losses
+    datetime latest_fight_at
+    string robot_url
+  }

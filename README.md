@@ -11,7 +11,7 @@ Transforma registros de lutas e hits em métricas temporais e comparações para
 [![CI](https://github.com/Olskaana/HitTrack/actions/workflows/ci.yml/badge.svg)](https://github.com/Olskaana/HitTrack/actions/workflows/ci.yml)
 [![Projeto acadêmico](https://img.shields.io/badge/projeto-acad%C3%AAmico-lightgrey)](#23-autora)
 
-**Projeto acadêmico Web App — PAC 8, 2026/2**
+**Projeto acadêmico Web App: PAC 8, 2026/2**
 
 **Autora:** Ana Maria Olska · Universidade Católica de Santa Catarina
 
@@ -125,7 +125,7 @@ Na página de análise, os hits são agrupados em três terços e dez intervalos
 
 ### Diferencial e comparação
 
-O diferencial proposto é organizar eventos de combate de robôs — não dados esportivos genéricos — em uma linha do tempo por competidor e conectá-los ao histórico da equipe. A comparação abaixo é de escopo, não um benchmark de precisão ou desempenho dos produtos.
+O diferencial proposto é organizar eventos de combate de robôs, não dados esportivos genéricos, em uma linha do tempo por competidor e conectá-los ao histórico da equipe. A comparação abaixo é de escopo, não um benchmark de precisão ou desempenho dos produtos.
 
 | Solução/categoria | Foco documentado | Relação com o HitTrack |
 |---|---|---|
@@ -138,9 +138,9 @@ O diferencial proposto é organizar eventos de combate de robôs — não dados 
 
 ### Capturas da aplicação
 
-> **Print pendente:** inserir captura da análise individual em `docs/img/analise-da-luta.png`.
->
-> **Print pendente:** inserir captura do painel Desempenho em `docs/img/desempenho.png`.
+![Análise individual de uma luta no HitTrack](docs/img/analise-da-luta.png)
+
+![Painel Desempenho do HitTrack](docs/img/desempenho.png)
 
 <a id="06-video-da-aplicacao"></a>
 
@@ -190,6 +190,8 @@ O analista/equipe opera o sistema; o detector opcional fornece eventos de vídeo
 
 Fonte editável: [`docs/diagramas/casos-de-uso.mmd`](docs/diagramas/casos-de-uso.mmd).
 
+Todos os SVGs de `docs/diagramas/` são gerados por [`gerar_diagramas.py`](docs/diagramas/gerar_diagramas.py), que define o layout e as rotas das setas: `python docs/diagramas/gerar_diagramas.py`.
+
 <a id="09-fluxos-de-uso"></a>
 
 ## 9. Fluxos de uso
@@ -230,19 +232,19 @@ Fonte editável: [`docs/diagramas/navegacao.mmd`](docs/diagramas/navegacao.mmd).
 
 O produto usa arquitetura cliente-servidor em camadas. O frontend React chama a API REST. Rotas FastAPI validam requisições e coordenam casos de uso; serviços e módulos de domínio calculam métricas; SQLAlchemy persiste entidades em PostgreSQL. O detector é uma dependência executada no ambiente do backend, mas mantida fora deste repositório.
 
-### C4 — contexto
+### C4: contexto
 
 ![C4 contexto do HitTrack](docs/diagramas/c4-contexto.svg)
 
 Fonte: [`docs/diagramas/c4-contexto.mmd`](docs/diagramas/c4-contexto.mmd).
 
-### C4 — contêineres
+### C4: contêineres
 
 ![C4 contêineres do HitTrack](docs/diagramas/c4-containers.svg)
 
 Fonte: [`docs/diagramas/c4-containers.mmd`](docs/diagramas/c4-containers.mmd).
 
-### C4 — componentes da API
+### C4: componentes da API
 
 ![C4 componentes da API HitTrack](docs/diagramas/c4-componentes.svg)
 
@@ -376,6 +378,16 @@ npm run build
 
 O pytest falha abaixo de 75% de cobertura backend. O Vitest exige pelo menos 25% em linhas, funções, branches e statements. Esses limites são configuração do projeto; resultados correntes devem ser conferidos nos artefatos do workflow, e não inferidos a partir dos limites.
 
+### Capturas de qualidade e testes
+
+![Relatório de cobertura dos testes do backend](docs/img/cobertura-backend.png)
+
+![Relatório de cobertura dos testes do frontend](docs/img/cobertura-frontend.png)
+
+![Execução aprovada do workflow no GitHub Actions](docs/img/github-actions.png)
+
+![Painel de qualidade do projeto no SonarCloud](docs/img/sonarcloud.png)
+
 ### Privacidade e LGPD
 
 Não há autenticação, autorização ou controles de acesso por equipe. Vídeos podem conter imagens e vozes de pessoas e, portanto, podem envolver dados pessoais. O repositório não implementa um fluxo para consentimento, base legal, acesso/retificação ou exclusão de dados. Antes de coletar ou compartilhar gravações, a equipe responsável deve definir finalidade, base legal, informação aos participantes, acesso restrito, retenção e descarte conforme orientação institucional e LGPD. Esta documentação não representa parecer jurídico nem certificação de conformidade.
@@ -394,33 +406,32 @@ O produto implementa cadastro e ingestão, métricas por luta, análise agregada
 
 ### Validação com cliente/equipe
 
-> **Validação pendente:** não há protocolo, data, participantes, tarefas executadas, feedback ou evidência de validação com cliente versionados neste repositório. Após realizar a avaliação, substituir este aviso por metodologia, perfil/quantidade de participantes com consentimento, tarefas, resultados observados, limitações e encaminhamentos. Não inserir nomes ou dados pessoais sem autorização.
+O cliente forneceu um vídeo de uma luta para validar os dados apresentados pelo HitTrack. Os hits identificados foram conferidos manualmente com base no vídeo, permitindo comparar os eventos registrados pela aplicação com os impactos observados. Após a apresentação dos resultados, o cliente demonstrou satisfação com a aplicação.
 
-> **Evidência pendente:** anexar capturas anonimizadas em `docs/img/` e relacioná-las aos resultados efetivamente observados.
+A conferência manual foi usada como validação dos hits desse vídeo.
 
 <a id="17-aderencia-a-linha-web-app"></a>
 
 ## 17. Aderência à linha Web App
 
-Este quadro aponta evidências presentes no repositório e itens que ainda precisam de comprovação para a entrega. “Documentado” não significa que houve validação externa.
+| Requisito da linha | Como o HitTrack atende | Onde ver |
+|---|---|---|
+| Sistema acessível | Execução local documentada; não há URL pública publicada. | [Execução local](#20-execucao-local-e-dependencias) |
+| Funcionalidades completas e reais conforme o escopo | Cadastro de lutas, ingestão de hits, métricas, análise histórica, rankings e sugestões com limitações explicitadas. | [Funcionalidades](#05-funcionalidades-diferencial-e-inovacao), [requisitos](#07-requisitos-funcionais-e-nao-funcionais) |
+| Interface funcional e navegável | Aplicação React/Vite com análise individual, painel Desempenho e navegação documentada. | [Navegação](#10-estrutura-de-navegacao), [análise da luta](docs/img/analise-da-luta.png), [Desempenho](docs/img/desempenho.png) |
+| Arquitetura definida | Separação cliente-servidor em camadas: React, API FastAPI e PostgreSQL. | [Arquitetura e diagramas C4](#11-arquitetura) |
+| Organização modular do código | Backend organizado em rotas, serviços, modelos e esquemas; frontend em páginas, componentes e hooks. | [Arquitetura](#11-arquitetura), [código-fonte](https://github.com/Olskaana/HitTrack) |
+| Código-fonte com histórico de commits | Repositório público no GitHub. | [Commits](https://github.com/Olskaana/HitTrack/commits) |
+| Requisitos funcionais | Requisitos RF-01 a RF-11 documentados. | [Requisitos funcionais](#07-requisitos-funcionais-e-nao-funcionais) |
+| Casos de uso | Diagrama e fluxos de uso para os principais atores e cenários. | [Casos de uso](#08-diagrama-de-casos-de-uso), [fluxos](#09-fluxos-de-uso) |
+| Diagrama de arquitetura (C4) | Diagramas de contexto, contêineres e componentes da API. | [Arquitetura](#11-arquitetura) |
+| Instruções de instalação e execução | Pré-requisitos, configuração local e comandos de execução documentados. | [Instalação e deploy](#19-instalacao-e-deploy), [execução local](#20-execucao-local-e-dependencias) |
+| Pelo menos três fluxos de negócio completos | Registrar/importar luta, analisar vídeo e consultar dashboard/histórico. | [Fluxos de uso](#09-fluxos-de-uso) |
+| Cobertura de testes | Capturas da execução mostram 93% no backend e 90,99% de linhas no frontend; o workflow de CI está aprovado. | [Backend](docs/img/cobertura-backend.png), [frontend](docs/img/cobertura-frontend.png), [GitHub Actions](docs/img/github-actions.png) |
+| Qualidade estática | Quality Gate aprovado no SonarCloud, conforme a captura registrada. | [SonarCloud](docs/img/sonarcloud.png), [workflow de CI](.github/workflows/ci.yml) |
+| Monitoramento | Endpoint Prometheus e stack local com Prometheus e Grafana. | [Monitoramento](#15-cicd-testes-qualidade-privacidade-e-monitoramento) |
 
-| Critério | Evidência / situação |
-|---|---|
-| Funcionalidades reais conforme escopo | [Funcionalidades](#05-funcionalidades-diferencial-e-inovacao) e [requisitos](#07-requisitos-funcionais-e-nao-funcionais). |
-| Interface funcional e navegável | Frontend React/Vite; estrutura ilustrada em [navegação](#10-estrutura-de-navegacao). Prints ainda pendentes. |
-| Arquitetura definida e modularidade | [Arquitetura e diagramas C4](#11-arquitetura); backend dividido em routers, serviços, modelos e esquemas. |
-| Repositório com histórico de commits | [Repositório GitHub](https://github.com/Olskaana/HitTrack). |
-| Requisitos funcionais e casos de uso | Seções [7](#07-requisitos-funcionais-e-nao-funcionais) a [9](#09-fluxos-de-uso). |
-| Três fluxos completos | Registrar/importar, analisar/calcular e consultar dashboard/histórico; [diagramas de atividade](#09-fluxos-de-uso). |
-| Instruções para instalar e executar | Seções [19](#19-instalacao-e-deploy) e [20](#20-execucao-local-e-dependencias). |
-| Hospedagem e demonstração | Não há URL pública documentada; a [execução local](#20-execucao-local-e-dependencias) está descrita. |
-| CI/CD | CI configurada no [workflow](.github/workflows/ci.yml); publicação/deploy contínuo não configurado. |
-| TDD e cobertura de testes | Há testes automatizados e limites configurados: backend 75%, frontend 25%; resultados reais dependem da execução. A prática de TDD deve ser demonstrada pelo histórico de desenvolvimento, não apenas por este README. |
-| Análise estática e segurança | Job SonarCloud condicional no workflow; sem avaliação de segurança concluída reportada neste README. |
-| Monitoramento/observabilidade | Endpoint Prometheus e stack local provisionada de Prometheus/Grafana; [detalhes](#15-cicd-testes-qualidade-privacidade-e-monitoramento). |
-| Documentação em Wiki | Wiki externa não identificada neste repositório; o material de referência da entrega está neste README. |
-| Teste de usabilidade/validação | Resultados com cliente/equipe ainda precisam ser registrados na [seção 16](#16-resultados-e-validacao-com-o-cliente). |
-| Privacidade e LGPD | Limitações e cuidados estão descritos na [seção 15](#15-cicd-testes-qualidade-privacidade-e-monitoramento); não equivale a auditoria de conformidade. |
+O projeto ainda não tem hospedagem pública nem avaliação estruturada de usabilidade documentada. O cliente avaliou os dados exibidos e demonstrou satisfação durante a apresentação da aplicação, conforme registrado na [seção 16](#16-resultados-e-validacao-com-o-cliente).
 
 <a id="18-trabalhos-futuros"></a>
 
@@ -541,13 +552,13 @@ Prometheus: `http://localhost:9090`; Grafana: `http://localhost:3000`. Para ence
 - [Mobalytics](https://mobalytics.gg/).
 - [Tableau](https://www.tableau.com/).
 - [Bold BI](https://www.boldbi.com/).
-- [FastAPI — documentação](https://fastapi.tiangolo.com/).
-- [React — documentação](https://react.dev/).
-- [PostgreSQL — documentação](https://www.postgresql.org/docs/).
-- [SQLAlchemy — documentação](https://docs.sqlalchemy.org/).
-- [Prometheus — documentação](https://prometheus.io/docs/).
-- [Grafana — documentação](https://grafana.com/docs/).
-- [Lei Geral de Proteção de Dados — Lei nº 13.709/2018](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
+- [FastAPI: documentação](https://fastapi.tiangolo.com/).
+- [React: documentação](https://react.dev/).
+- [PostgreSQL: documentação](https://www.postgresql.org/docs/).
+- [SQLAlchemy: documentação](https://docs.sqlalchemy.org/).
+- [Prometheus: documentação](https://prometheus.io/docs/).
+- [Grafana: documentação](https://grafana.com/docs/).
+- [Lei Geral de Proteção de Dados (Lei nº 13.709/2018)](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 
 <a id="23-autora"></a>
 
@@ -555,8 +566,8 @@ Prometheus: `http://localhost:9090`; Grafana: `http://localhost:3000`. Para ence
 
 **Ana Maria Olska**  
 Universidade Católica de Santa Catarina  
-Jaraguá do Sul, Santa Catarina — Brasil
+Jaraguá do Sul, Santa Catarina, Brasil
 
 Contato: [anamaria.olska@gmail.com](mailto:anamaria.olska@gmail.com)
 
-Projeto acadêmico — PAC 8, linha Web Apps, 2026/2.
+Projeto acadêmico: PAC 8, linha Web Apps, 2026/2.
