@@ -1877,7 +1877,7 @@ export default function App() {
         if (!controller.signal.aborted) setFightResultRankingLoading(false);
       }
     }
-    loadFightResultRanking();
+    void loadFightResultRanking();
     return () => controller.abort();
   }, [fight?.category, fight?.winner_robot, fightRankingCategories]);
 
